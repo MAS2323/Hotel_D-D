@@ -1,0 +1,51 @@
+/* src/components/sections/RestaurantSection.css */
+.restaurant-section {
+  padding: 4rem 0;
+  background-color: #f9f9f9;
+}
+
+.restaurant-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+  text-align: center;
+}
+
+.restaurant-title {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #180501;
+  margin-bottom: 1rem;
+}
+
+.restaurant-description {
+  font-size: 1.2rem;
+  color: #701705;
+  margin-bottom: 2rem;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.restaurant-image {
+  width: 100%;
+  max-width: 800px;
+  height: 400px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
+
+.restaurant-button {
+  background-color: #701705;
+  color: white;
+  border: none;
+  padding: 1rem 2rem;
+  font-size: 1.1rem;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.restaurant-button:hover {
+  background-color: #180501;
+}

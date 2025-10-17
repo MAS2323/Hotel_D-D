@@ -1,0 +1,155 @@
+/* src/components/layout/Header.css */
+.header {
+  background: linear-gradient(to right, #701705, #180501);
+  color: white;
+  box-shadow: 0 4px 6px rgba(112, 23, 5, 0.3);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.header-nav {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.header-logo {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: white;
+  text-decoration: none;
+  position: absolute;
+  left: 1rem;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+  right: 1rem;
+  position: absolute;
+}
+
+.header-menu {
+  display: flex;
+  list-style: none;
+  gap: 1.5rem;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+}
+
+.header-link {
+  color: white;
+  text-decoration: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  transition: background-color 0.3s;
+}
+
+.header-link:hover,
+.header-link-active {
+  background-color: rgba(255, 255, 255, 0.1);
+  text-decoration: underline;
+}
+
+.header-admin-btn,
+.header-logout-btn {
+  background-color: #180501;
+  color: white;
+  border: 1px solid white;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background-color 0.3s;
+  font-size: 0.9rem;
+}
+
+.header-admin-btn:hover,
+.header-logout-btn:hover {
+  background-color: white;
+  color: #701705;
+}
+
+/* Hamburger Menu */
+.header-hamburger {
+  display: none;
+  flex-direction: column;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem;
+}
+
+.header-hamburger span {
+  width: 25px;
+  height: 3px;
+  background-color: white;
+  margin: 3px 0;
+  transition: 0.3s;
+}
+
+/* Mobile Styles */
+@media (max-width: 768px) {
+  .header-logo {
+    left: 0.5rem;
+    font-size: 1.25rem;
+  }
+
+  .header-right {
+    right: 0.5rem;
+  }
+
+  .header-hamburger {
+    display: flex;
+  }
+
+  .header-menu {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background: linear-gradient(to bottom, #701705, #180501);
+    flex-direction: column;
+    gap: 0;
+    width: 250px;
+    box-shadow: -5px 0 10px rgba(112, 23, 5, 0.3);
+    transform: translateY(-100%);
+    opacity: 0;
+    visibility: hidden;
+    transition: transform 0.3s ease, opacity 0.3s ease, visibility 0.3s ease;
+  }
+
+  .header-menu-open {
+    transform: translateY(0);
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .header-menu li {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .header-menu li:last-child {
+    border-bottom: none;
+  }
+
+  .header-link {
+    display: block;
+    padding: 1rem;
+    width: 100%;
+    text-align: left;
+  }
+
+  .header-admin-btn,
+  .header-logout-btn {
+    width: 100%;
+    text-align: center;
+    margin: 0;
+  }
+}

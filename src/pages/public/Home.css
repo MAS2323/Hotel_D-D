@@ -1,0 +1,48 @@
+/* src/pages/Home.css */
+.home-section-white {
+  padding: 4rem 0;
+  background-color: white;
+}
+
+.home-section-gray {
+  padding: 4rem 0;
+  background-color: #f9f9f9; /* Light gray fallback, but using white tones */
+}
+
+.home-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.home-section-title {
+  font-size: 2rem;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 2rem;
+  color: #180501;
+}
+
+.home-rooms-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+}
+
+@media (min-width: 768px) {
+  .home-rooms-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.home-testimonials-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+}
+
+@media (min-width: 768px) {
+  .home-testimonials-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

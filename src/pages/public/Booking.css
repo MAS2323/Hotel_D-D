@@ -1,0 +1,19 @@
+/* src/pages/Booking.css */
+.booking-section {
+  padding: 4rem 0;
+  background-color: white;
+}
+
+.booking-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.booking-title {
+  font-size: 2rem;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 2rem;
+  color: #180501;
+}

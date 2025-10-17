@@ -1,0 +1,8 @@
+@import "tailwindcss";
+
+/* Mejora para mobile */
+@media (max-width: 640px) {
+  .text-5xl {
+    @apply text-3xl;
+  }
+}

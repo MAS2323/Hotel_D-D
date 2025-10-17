@@ -1,0 +1,50 @@
+/* src/components/sections/ServicesSection.css */
+.services-section {
+  padding: 4rem 0;
+  background-color: white;
+}
+
+.services-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.services-title {
+  font-size: 2rem;
+  font-weight: bold;
+  text-align: center;
+  color: #180501;
+  margin-bottom: 2rem;
+}
+
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+}
+
+.service-item {
+  text-align: center;
+  padding: 1.5rem;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  border: 1px solid #701705;
+}
+
+.service-icon {
+  font-size: 3rem;
+  display: block;
+  margin-bottom: 1rem;
+}
+
+.service-title {
+  font-size: 1.3rem;
+  font-weight: bold;
+  color: #180501;
+  margin-bottom: 0.5rem;
+}
+
+.service-desc {
+  color: #701705;
+}

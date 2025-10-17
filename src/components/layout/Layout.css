@@ -1,0 +1,23 @@
+/* src/components/layout/Layout.css (Actualizado para asegurar sticky footer) */
+html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.layout-wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* Asegura que ocupe al menos toda la viewport */
+}
+
+.layout-wrapper main {
+  flex: 1; /* Hace que el main crezca para empujar el footer al fondo */
+  display: flex;
+  flex-direction: column;
+}
+
+.footer {
+  margin-top: auto; /* Empuja el footer al fondo del flex container */
+}

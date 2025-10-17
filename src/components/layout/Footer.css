@@ -1,0 +1,27 @@
+/* src/components/layout/Footer.css */
+.footer {
+  background-color: #701705;
+  color: white;
+  padding: 2rem 0;
+  margin-top: auto;
+}
+
+.footer-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+  text-align: center;
+}
+
+.footer-contact {
+  margin-top: 0.5rem;
+}
+
+.footer-contact a {
+  color: white;
+  text-decoration: underline;
+}
+
+.footer-contact a:hover {
+  color: #180501;
+}

@@ -1,0 +1,20 @@
+/* src/components/ui/TestimonialCard.css */
+.testimonial-card {
+  background-color: white;
+  padding: 2rem;
+  border-left: 4px solid #701705;
+  box-shadow: 0 2px 4px rgba(112, 23, 5, 0.1);
+}
+
+.testimonial-quote {
+  font-style: italic;
+  color: #180501;
+  margin-bottom: 1rem;
+  line-height: 1.6;
+  font-size: 1.1rem;
+}
+
+.testimonial-author-name {
+  color: #701705;
+  font-weight: bold;
+}

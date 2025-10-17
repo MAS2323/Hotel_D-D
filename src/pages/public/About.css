@@ -1,0 +1,29 @@
+/* src/pages/About.css */
+.about-section {
+  padding: 4rem 0;
+  background-color: white;
+}
+
+.about-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.about-title {
+  font-size: 2rem;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 2rem;
+  color: #180501;
+}
+
+.about-text {
+  font-size: 1.125rem;
+  margin-bottom: 1rem;
+  color: #180501;
+  line-height: 1.6;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+}
