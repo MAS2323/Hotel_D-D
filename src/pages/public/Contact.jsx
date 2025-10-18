@@ -42,18 +42,21 @@ const Contact = () => {
           >
             <h2 className="contact-info-title">Información de Contacto</h2>
             <p className="contact-detail">
-              Dirección: Calle de la Aventura 123, Ciudad Mágica
+              Dirección: Cruce Guinea Circula, Malabo Guinea Ecuatorial
             </p>
             <p className="contact-detail">
               Email:{" "}
-              <a href="mailto:info@hoteldnd.com" className="contact-link">
-                info@hoteldnd.com
+              <a
+                href="mailto:hotelddguineaecuatorial@gmail.com"
+                className="contact-link"
+              >
+                hotelddguineaecuatorial@gmail.com
               </a>
             </p>
             <p className="contact-detail">
               Teléfono:{" "}
-              <a href="tel:+1234567890" className="contact-link">
-                +1-234-567-890
+              <a href="tel:+240 555 317 945" className="contact-link">
+                +240 555 317 945
               </a>
             </p>
             <p className="contact-note">
