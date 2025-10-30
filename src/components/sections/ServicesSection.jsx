@@ -32,3 +32,40 @@ const ServicesSection = () => {
 };
 
 export default ServicesSection;
+
+
+/**
+ * // src/components/sections/ServicesSection.js
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import "./ServicesSection.css";
+
+const ServicesSection = () => {
+  const [services, setServices] = useState([]);
+
+  useEffect(() => {
+    axios.get('/api/services')
+      .then(response => setServices(response.data))
+      .catch(error => console.error('Error fetching services:', error));
+  }, []);
+
+  return (
+    <section className="services-section">
+      <div className="services-container">
+        <h2 className="services-title">Nuestros Servicios</h2>
+        <div className="services-grid">
+          {services.map((service, index) => (
+            <div key={index} className="service-item">
+              <img src={service.icon_url} alt={service.title} className="service-icon" />
+              <h3 className="service-title">{service.title}</h3>
+              <p className="service-desc">{service.desc}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+export default ServicesSection;
+ */

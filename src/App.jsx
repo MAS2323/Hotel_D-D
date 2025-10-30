@@ -10,6 +10,8 @@ import Restaurant from "./pages/public/Restaurant";
 import Rooms from "./pages/public/Rooms";
 import Services from "./pages/public/Services";
 import "./App.css";
+import Login from "./pages/admin/Login";
+import Register from "./pages/admin/Register";
 
 function App() {
   return (
@@ -23,6 +25,8 @@ function App() {
           <Route path="/restaurant" element={<Restaurant />} />
           <Route path="/rooms" element={<Rooms />} />
           <Route path="/services" element={<Services />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/admin/login" element={<Login />} />
           {/* Add admin routes if needed */}
         </Routes>
       </Layout>
