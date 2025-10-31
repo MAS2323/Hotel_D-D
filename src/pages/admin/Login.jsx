@@ -19,20 +19,19 @@ const Login = () => {
     setCredentials({ ...credentials, [e.target.name]: e.target.value });
   };
 
+  // src/pages/admin/Login.jsx (extracto de handleSubmit)
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
     setIsLoading(true);
 
     try {
-      // Llama al endpoint real de login
       const response = await usersAPI.login({
         username: credentials.username,
         password: credentials.password,
       });
 
-      // Asume que useAuth.login espera el access_token
-      login(response.access_token);
+      login(response.access_token); // Ahora login es función del hook
       navigate("/admin");
     } catch (err) {
       setError(

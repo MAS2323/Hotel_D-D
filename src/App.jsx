@@ -12,6 +12,7 @@ import Services from "./pages/public/Services";
 import "./App.css";
 import Login from "./pages/admin/Login";
 import Register from "./pages/admin/Register";
+import AdminDashboard from "./pages/admin/AdminDashboard";
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
           <Route path="/services" element={<Services />} />
           <Route path="/register" element={<Register />} />
           <Route path="/admin/login" element={<Login />} />
+          <Route path="/admin/*" element={<AdminDashboard />} />
           {/* Add admin routes if needed */}
         </Routes>
       </Layout>

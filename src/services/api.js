@@ -159,7 +159,7 @@ export const testimonialsAPI = {
 export const usersAPI = {
   register: async (userData) => {
     const response = await fetch(`${BASE_URL}/users/`, {
-      // Removí el trailing slash
+      // Mantiene / para register
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(userData),
@@ -172,6 +172,7 @@ export const usersAPI = {
   },
   login: async (userData) => {
     const response = await fetch(`${BASE_URL}/users/login`, {
+      // Sin trailing / para evitar 404
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(userData),

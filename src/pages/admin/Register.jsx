@@ -104,13 +104,12 @@ const Register = () => {
               placeholder="Contraseña"
               value={userData.password}
               onChange={(e) => {
-                // Trunca a 72 bytes (o valida longitud)
-                const truncated = e.target.value.slice(0, 72);
+                const truncated = e.target.value.slice(0, 72); // Trunca a 72 chars (aprox bytes)
                 setUserData({ ...userData, password: truncated });
               }}
               required
               minLength="6"
-              maxLength="72" // Nueva: Limita UI
+              maxLength="72"
               aria-label="Contraseña"
             />
           </div>
@@ -126,7 +125,7 @@ const Register = () => {
 
         <p className="register-hint">
           ¿Ya tienes cuenta?{" "}
-          <a href="/login" className="register-link">
+          <a href="/admin/login" className="register-link">
             Inicia sesión aquí
           </a>
         </p>
