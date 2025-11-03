@@ -1,0 +1,36 @@
+.auth-error {
+  text-align: center;
+  background: #fff3e0;
+  border: 1px solid #ff9800;
+}
+
+.auth-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 15px;
+}
+
+.btn-primary {
+  background: #2196f3;
+  color: white;
+  padding: 10px 20px;
+}
+
+.btn-secondary {
+  background: #ff9800;
+  color: white;
+  padding: 10px 20px;
+}
+
+.btn-retry {
+  background: #4caf50;
+  color: white;
+  padding: 10px 20px;
+}
+
+.loading-spinner {
+  text-align: center;
+  padding: 40px;
+  color: #666;
+}
