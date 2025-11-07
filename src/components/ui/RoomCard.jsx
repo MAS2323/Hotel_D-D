@@ -1,11 +1,21 @@
-// components/ui/RoomCard.jsx - Versión simplificada
+// components/ui/RoomCard.jsx
 import React from "react";
+import { useNavigate } from "react-router-dom"; // Importa el hook
 import "./RoomCard.css";
 
 const RoomCard = ({ room }) => {
+  const navigate = useNavigate(); // Hook para navegar
+
+  const handleDetailsClick = () => {
+    // Opción 1: Pasar datos por state (más rápido)
+    navigate(`/rooms/${room.id}`, { state: { room } });
+
+    // Opción 2: Solo pasar ID y fetch en el destino (más actualizado)
+    // navigate(`/rooms/${room.id}`);
+  };
+
   return (
     <div className="room-card">
-      {/* Imagen principal - mismo patrón que RoomsManagement */}
       {room.images?.[0] && (
         <img
           src={room.images[0].url}
@@ -19,7 +29,7 @@ const RoomCard = ({ room }) => {
         <p className="room-card-description">
           {room.description || "Sin descripción"}
         </p>
-        <p className="room-card-price">${room.price}/noche</p>
+        <p className="room-card-price">XAF{room.price}/noche</p>
 
         <span
           className={`room-status ${
@@ -29,7 +39,6 @@ const RoomCard = ({ room }) => {
           {room.is_available ? "Disponible" : "Ocupada"}
         </span>
 
-        {/* Mini galería si hay imágenes */}
         {room.images && room.images.length > 0 && (
           <div className="room-mini-gallery">
             {room.images.slice(0, 3).map((img, idx) => (
@@ -43,7 +52,10 @@ const RoomCard = ({ room }) => {
           </div>
         )}
 
-        <button className="room-card-button">Ver Detalles</button>
+        {/* Botón con handler */}
+        <button onClick={handleDetailsClick} className="room-card-button">
+          Ver Detalles
+        </button>
       </div>
     </div>
   );

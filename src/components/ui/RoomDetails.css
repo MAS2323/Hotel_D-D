@@ -1,0 +1,286 @@
+/* pages/RoomDetails.css */
+/* Variables CSS para consistencia */
+:root {
+  --primary-color: #667eea;
+  --primary-dark: #5a67d8;
+  --success-color: #28a745;
+  --danger-color: #dc3545;
+  --text-dark: #2d3748;
+  --text-medium: #4a5568;
+  --text-light: #718096;
+  --bg-light: #f7fafc;
+  --bg-white: #ffffff;
+  --shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
+  --shadow-hover: 0 10px 15px rgba(0, 0, 0, 0.1);
+  --radius: 12px;
+}
+
+.room-details-page {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 1.5rem;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.back-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+  color: var(--primary-color);
+  text-decoration: none;
+  font-weight: 600;
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius);
+  background: var(--bg-white);
+  box-shadow: var(--shadow);
+  transition: all 0.3s ease;
+}
+
+.back-button:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-hover);
+  color: var(--primary-dark);
+}
+
+.room-details-container {
+  background: var(--bg-white);
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  margin-bottom: 3rem;
+}
+
+.room-main-info {
+  padding: 2.5rem;
+}
+
+.room-title {
+  font-size: clamp(1.8rem, 4vw, 2.5rem);
+  margin-bottom: 1.8rem;
+  color: var(--text-dark);
+  font-weight: 700;
+}
+
+.room-features {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2.5rem;
+  padding: 1.8rem;
+  background: var(--bg-light);
+  border-radius: var(--radius);
+}
+
+.feature-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.feature-item .label {
+  color: var(--text-medium);
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+.feature-item .value {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: var(--text-dark);
+}
+
+.feature-item .value.highlight {
+  color: var(--primary-color);
+  font-size: 1.6rem;
+}
+
+.status-badge {
+  padding: 0.6rem 1.2rem;
+  border-radius: 25px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  display: inline-block;
+  box-shadow: var(--shadow);
+}
+
+.status-badge.available {
+  background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+  color: #155724;
+}
+
+.status-badge.occupied {
+  background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
+  color: #721c24;
+}
+
+.description-section {
+  margin-bottom: 2.5rem;
+}
+
+.description-section h2 {
+  margin-bottom: 1.2rem;
+  color: var(--text-dark);
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.description-text {
+  font-size: 1.1rem;
+  line-height: 1.8;
+  color: var(--text-medium);
+}
+
+.booking-section {
+  text-align: center;
+  padding-top: 2.5rem;
+  border-top: 2px solid var(--bg-light);
+}
+
+.btn-reserve {
+  background: linear-gradient(
+    135deg,
+    var(--primary-color) 0%,
+    var(--primary-dark) 100%
+  );
+  color: white;
+  border: none;
+  padding: 1.2rem 3.5rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+}
+
+.btn-reserve:hover:not(.disabled) {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(102, 126, 234, 0.5);
+}
+
+.btn-reserve.disabled {
+  background: var(--text-light);
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+/* Estados de carga */
+.loading,
+.error,
+.not-found {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 60vh;
+  font-size: 1.3rem;
+  font-weight: 500;
+}
+
+.loading {
+  color: var(--primary-color);
+}
+
+.error {
+  color: var(--danger-color);
+}
+
+.not-found {
+  color: var(--text-medium);
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+  .room-details-page {
+    padding: 1.2rem;
+  }
+
+  .room-main-info {
+    padding: 2rem;
+  }
+}
+
+@media (max-width: 768px) {
+  :root {
+    --radius: 10px;
+  }
+
+  .room-details-page {
+    padding: 1rem;
+  }
+
+  .back-button {
+    padding: 0.6rem 1rem;
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+  }
+
+  .room-details-container {
+    border-radius: var(--radius);
+  }
+
+  .room-main-info {
+    padding: 1.5rem;
+  }
+
+  .room-title {
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .room-features {
+    grid-template-columns: 1fr;
+    gap: 1.2rem;
+    padding: 1.2rem;
+  }
+
+  .feature-item .value.highlight {
+    font-size: 1.4rem;
+  }
+
+  .status-badge {
+    font-size: 0.85rem;
+    padding: 0.4rem 0.8rem;
+  }
+
+  .description-section {
+    margin-bottom: 2rem;
+  }
+
+  .description-section h2 {
+    font-size: 1.3rem;
+  }
+
+  .description-text {
+    font-size: 1rem;
+  }
+
+  .booking-section {
+    padding-top: 2rem;
+  }
+
+  .btn-reserve {
+    padding: 1rem 2.5rem;
+    font-size: 1rem;
+    width: 100%;
+    max-width: 300px;
+  }
+}
+
+@media (max-width: 480px) {
+  .room-title {
+    font-size: 1.5rem;
+  }
+
+  .room-main-info {
+    padding: 1.2rem;
+  }
+
+  .feature-item .value {
+    font-size: 1.2rem;
+  }
+
+  .feature-item .value.highlight {
+    font-size: 1.3rem;
+  }
+}

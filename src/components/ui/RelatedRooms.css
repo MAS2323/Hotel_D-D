@@ -1,0 +1,71 @@
+/* components/rooms/RelatedRooms.css */
+.related-rooms-container {
+  margin-top: 4rem;
+  padding: 2rem 0;
+  border-top: 2px solid #f0f0f0;
+}
+
+.related-rooms-title {
+  text-align: center;
+  margin-bottom: 2rem;
+  color: #333;
+  font-size: 1.8rem;
+}
+
+.related-rooms-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.related-room-card {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.related-room-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+}
+
+.related-room-image {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+}
+
+.related-room-info {
+  padding: 1.2rem;
+}
+
+.related-room-info h3 {
+  margin: 0 0 0.5rem 0;
+  color: #333;
+  font-size: 1.1rem;
+}
+
+.related-room-info .price {
+  font-weight: bold;
+  color: #667eea;
+  margin: 0.5rem 0;
+}
+
+.related-room-info .status {
+  font-size: 0.85rem;
+  padding: 0.2rem 0.6rem;
+  border-radius: 12px;
+}
+
+.related-room-info .status.available {
+  background: #d4edda;
+  color: #155724;
+}
+
+.related-room-info .status.occupied {
+  background: #f8d7da;
+  color: #721c24;
+}

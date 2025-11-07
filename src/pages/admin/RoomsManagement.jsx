@@ -11,10 +11,12 @@ export default function RoomsManagement() {
     description: "",
     price: "",
     is_available: true,
+    is_featured: false,
   });
   const [newImages, setNewImages] = useState([]);
   const [previews, setPreviews] = useState([]);
   const [search, setSearch] = useState("");
+  const [submitting, setSubmitting] = useState(false);
 
   // ---------- CARGAR HABITACIONES ----------
   useEffect(() => {
@@ -55,34 +57,46 @@ export default function RoomsManagement() {
   // ---------- SUBMIT ----------
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setSubmitting(true);
+
     const form = new FormData();
     form.append("name", formData.name);
     form.append("description", formData.description || "");
     form.append("price", formData.price);
     form.append("is_available", formData.is_available);
+    form.append("is_featured", formData.is_featured || false);
 
-    // alt_list (una por imagen)
     newImages.forEach((_, i) =>
       form.append("alt_list", formData.alt || `Imagen ${i + 1}`)
     );
-
-    // files (nombre exacto que espera tu backend)
     newImages.forEach((file) => form.append("files", file));
 
     try {
-      if (editing) await roomsAPI.update(editing, form);
-      else await roomsAPI.create(form);
+      if (editing) {
+        await roomsAPI.update(editing, form);
+      } else {
+        await roomsAPI.create(form);
+      }
       fetchRooms();
       resetForm();
+      alert("✅ Habitación guardada exitosamente");
     } catch (err) {
-      console.error(err);
-      alert("Error al guardar habitación");
+      console.error("❌ Error:", err);
+      alert("Error al guardar habitación: " + err.message);
+    } finally {
+      setSubmitting(false);
     }
   };
 
   // ---------- UTILS ----------
   const resetForm = () => {
-    setFormData({ name: "", description: "", price: "", is_available: true });
+    setFormData({
+      name: "",
+      description: "",
+      price: "",
+      is_available: true,
+      is_featured: false,
+    });
     setNewImages([]);
     setPreviews([]);
     setEditing(null);
@@ -95,6 +109,7 @@ export default function RoomsManagement() {
       description: room.description || "",
       price: room.price,
       is_available: room.is_available,
+      is_featured: room.is_featured || false,
     });
   };
 
@@ -105,11 +120,12 @@ export default function RoomsManagement() {
       setRooms((prev) => prev.filter((r) => r.id !== id));
     } catch (err) {
       console.error(err);
-      alert("Error al eliminar habitación");
+      /*  mostrar el detalle que envía el servidor  */
+      const msg = err.message || err;
+      alert("No se pudo eliminar: " + msg);
     }
   };
 
-  // helper to provide authorization headers (adjust to your auth storage)
   const getAuthHeaders = () => {
     const token = localStorage.getItem("token");
     return token ? { Authorization: `Bearer ${token}` } : {};
@@ -117,20 +133,13 @@ export default function RoomsManagement() {
 
   const handleStatusChange = async (id, newStatus) => {
     try {
-      const res = await fetch(
-        `http://localhost:8000/admin/rooms/${id}/status`,
-        {
-          method: "PATCH",
-          headers: { "Content-Type": "application/json", ...getAuthHeaders() },
-          body: JSON.stringify({ is_available: newStatus }),
-        }
-      );
-      if (!res.ok) throw new Error("Error al cambiar estado");
-      const updated = await res.json();
+      const fd = new FormData();
+      fd.append("is_available", newStatus); // solo el campo que cambia
+      const updated = await roomsAPI.update(id, fd);
       setRooms((prev) => prev.map((r) => (r.id === id ? updated : r)));
     } catch (err) {
       console.error(err);
-      alert("Error al cambiar estado");
+      alert("Error al cambiar estado: " + (err.message || err));
     }
   };
 
@@ -189,8 +198,16 @@ export default function RoomsManagement() {
           />
           Disponible
         </label>
-
-        {/* SUBIDA DE IMÁGENES */}
+        <label className="form-checkbox">
+          <input
+            type="checkbox"
+            checked={formData.is_featured}
+            onChange={(e) =>
+              setFormData({ ...formData, is_featured: e.target.checked })
+            }
+          />
+          Habitación Destacada
+        </label>
 
         <h4>Agregar nuevas imágenes</h4>
         <input
@@ -223,8 +240,12 @@ export default function RoomsManagement() {
         )}
 
         <div className="form-actions">
-          <button type="submit" className="btn btn-primary">
-            {editing ? "Actualizar" : "Crear"}
+          <button
+            type="submit"
+            className="btn btn-primary"
+            disabled={submitting}
+          >
+            {submitting ? "Procesando…" : editing ? "Actualizar" : "Crear"}
           </button>
           <button
             type="button"
@@ -249,8 +270,11 @@ export default function RoomsManagement() {
 
             <div className="room-card-content">
               <h3 className="card-title">{room.name}</h3>
+              {room.is_featured && (
+                <span className="featured-badge">⭐ Destacada</span>
+              )}
               <p className="card-description">{room.description}</p>
-              <p className="card-price">Precio: ${room.price}/noche</p>
+              <p className="card-price">Precio: XAF{room.price}/noche</p>
               <span
                 className={`status-badge ${
                   room.is_available ? "available" : "occupied"
@@ -301,6 +325,13 @@ export default function RoomsManagement() {
 
       {filtered.length === 0 && !loading && (
         <p className="no-results">No se encontraron habitaciones.</p>
+      )}
+
+      {/* ---------- INDICADOR CIRCULAR CENTRADO ---------- */}
+      {submitting && (
+        <div className="overlay-loader">
+          <div className="spinner" />
+        </div>
       )}
     </div>
   );

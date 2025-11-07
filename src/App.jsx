@@ -13,6 +13,8 @@ import "./App.css";
 import Login from "./pages/admin/Login";
 import Register from "./pages/admin/Register";
 import AdminDashboard from "./pages/admin/AdminDashboard";
+import RoomDetails from "./components/ui/RoomDetails";
+import ImageFullView from "./components/ui/ImageFullView";
 
 function App() {
   return (
@@ -25,6 +27,11 @@ function App() {
           <Route path="/contact" element={<Contact />} />
           <Route path="/restaurant" element={<Restaurant />} />
           <Route path="/rooms" element={<Rooms />} />
+          <Route path="/rooms/:roomId" element={<RoomDetails />} />
+          <Route
+            path="/rooms/:roomId/image/:imageIndex"
+            element={<ImageFullView />}
+          />
           <Route path="/services" element={<Services />} />
           <Route path="/register" element={<Register />} />
           <Route path="/admin/login" element={<Login />} />
