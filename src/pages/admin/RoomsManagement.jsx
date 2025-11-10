@@ -126,10 +126,10 @@ export default function RoomsManagement() {
     }
   };
 
-  const getAuthHeaders = () => {
-    const token = localStorage.getItem("token");
-    return token ? { Authorization: `Bearer ${token}` } : {};
-  };
+  // const getAuthHeaders = () => {
+  //   const token = localStorage.getItem("token");
+  //   return token ? { Authorization: `Bearer ${token}` } : {};
+  // };
 
   const handleStatusChange = async (id, newStatus) => {
     try {

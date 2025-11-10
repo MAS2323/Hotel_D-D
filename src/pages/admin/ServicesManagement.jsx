@@ -5,7 +5,8 @@ import "./ServicesManagement.css";
 export default function ServicesManagement() {
   const [services, setServices] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [editing, setEditing] = useState(null); // id del servicio en edición
+  const [operationLoading, setOperationLoading] = useState(false);
+  const [editing, setEditing] = useState(null);
   const [formData, setFormData] = useState({ title: "", desc: "" });
   const [iconFile, setIconFile] = useState(null);
   const [search, setSearch] = useState("");
@@ -33,6 +34,7 @@ export default function ServicesManagement() {
   // Crear o actualizar servicio
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setOperationLoading(true); // Inicia loader
     try {
       let response;
       if (editing) {
@@ -55,18 +57,23 @@ export default function ServicesManagement() {
     } catch (err) {
       console.error("Error al guardar servicio:", err);
       alert("Error al guardar servicio");
+    } finally {
+      setOperationLoading(false); // Detiene loader
     }
   };
 
   // Eliminar servicio
   const handleDelete = async (id) => {
     if (!confirm("¿Eliminar este servicio?")) return;
+    setOperationLoading(true); // Inicia loader
     try {
       await servicesAPI.delete(id);
       setServices(services.filter((s) => s.id !== id));
     } catch (err) {
       console.error("Error al eliminar servicio:", err);
       alert("Error al eliminar servicio");
+    } finally {
+      setOperationLoading(false); // Detiene loader
     }
   };
 
@@ -90,6 +97,16 @@ export default function ServicesManagement() {
     <div className="services-management">
       <h2 className="section-title">Gestión de Servicios</h2>
 
+      {/* Loader global para operaciones */}
+      {operationLoading && (
+        <div className="global-loader">
+          <div className="circular-progress">
+            <div className="spinner"></div>
+            <p>Procesando...</p>
+          </div>
+        </div>
+      )}
+
       {/* Buscador */}
       <input
         type="text"
@@ -111,6 +128,7 @@ export default function ServicesManagement() {
           onChange={(e) => setFormData({ ...formData, title: e.target.value })}
           className="form-input"
           required
+          disabled={operationLoading} // Deshabilita durante loader
         />
         <textarea
           placeholder="Descripción"
@@ -119,21 +137,28 @@ export default function ServicesManagement() {
           className="form-textarea"
           rows={3}
           required
+          disabled={operationLoading} // Deshabilita durante loader
         />
         <input
           type="file"
           accept="image/*"
           onChange={(e) => setIconFile(e.target.files[0])}
           className="form-file"
+          disabled={operationLoading} // Deshabilita durante loader
         />
         <div className="form-actions">
-          <button type="submit" className="btn btn-primary">
+          <button
+            type="submit"
+            className="btn btn-primary"
+            disabled={operationLoading}
+          >
             {editing ? "Actualizar" : "Crear"}
           </button>
           <button
             type="button"
             onClick={resetForm}
             className="btn btn-secondary"
+            disabled={operationLoading}
           >
             Cancelar
           </button>
@@ -157,12 +182,14 @@ export default function ServicesManagement() {
               <button
                 onClick={() => handleEdit(service)}
                 className="btn btn-edit"
+                disabled={operationLoading}
               >
                 Editar
               </button>
               <button
                 onClick={() => handleDelete(service.id)}
                 className="btn btn-delete"
+                disabled={operationLoading}
               >
                 Eliminar
               </button>
@@ -171,7 +198,7 @@ export default function ServicesManagement() {
         ))}
       </div>
 
-      {filtered.length === 0 && (
+      {filtered.length === 0 && !operationLoading && (
         <p className="no-results">No se encontraron servicios.</p>
       )}
     </div>

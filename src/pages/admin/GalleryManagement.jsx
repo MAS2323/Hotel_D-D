@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { galleryAPI } from "../../services/api";
-import "./GalleryManagement.css"; // opcional, para mejoras
+import "./GalleryManagement.css";
 
 export default function GalleryManagement() {
   const [images, setImages] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [operationLoading, setOperationLoading] = useState(false);
   const [editing, setEditing] = useState(null);
   const [formData, setFormData] = useState({ alt: "", desc: "" });
-  const [file, setFile] = useState(null);
-  const [preview, setPreview] = useState(null);
+  const [files, setFiles] = useState([]); // Cambiado: array para múltiples
+  const [previews, setPreviews] = useState([]); // Array para previews
 
   // GET imágenes
   useEffect(() => {
@@ -25,64 +26,78 @@ export default function GalleryManagement() {
       .finally(() => setLoading(false));
   }, []);
 
-  // Preview de imagen
+  // Previews múltiples
   useEffect(() => {
-    if (file) {
-      const objectUrl = URL.createObjectURL(file);
-      setPreview(objectUrl);
-      return () => URL.revokeObjectURL(objectUrl);
+    if (files.length > 0) {
+      const objectUrls = files.map((file) => URL.createObjectURL(file));
+      setPreviews(objectUrls);
+      return () => objectUrls.forEach((url) => URL.revokeObjectURL(url));
+    } else {
+      setPreviews([]);
     }
-  }, [file]);
+  }, [files]);
 
-  // Crear o actualizar
+  // Crear (batch) o actualizar (single)
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setOperationLoading(true);
     try {
       let response;
       if (editing) {
+        // Single update (mantiene lógica original)
         response = await galleryAPI.update(
           editing,
           formData.alt,
           formData.desc,
-          file
+          files[0] || null // Toma el primero si hay
         );
         setImages(images.map((img) => (img.id === editing ? response : img)));
       } else {
-        response = await galleryAPI.create(formData.alt, formData.desc, file);
-        setImages([...images, response]);
+        // Batch create: múltiples archivos con mismo alt/desc
+        if (files.length === 0) {
+          alert("Selecciona al menos una imagen");
+          return;
+        }
+        response = await galleryAPI.create(formData.alt, formData.desc, files); // Envía array de files
+        setImages([...images, ...response]); // Agrega todas las nuevas
       }
       resetForm();
     } catch (err) {
-      console.error("Error al guardar imagen:", err);
-      alert("Error al guardar imagen");
+      console.error("Error al guardar imágenes:", err);
+      alert("Error al guardar imágenes");
+    } finally {
+      setOperationLoading(false);
     }
   };
 
-  // Eliminar
+  // Eliminar (sin cambios)
   const handleDelete = async (id) => {
     if (!confirm("¿Eliminar esta imagen?")) return;
+    setOperationLoading(true);
     try {
       await galleryAPI.delete(id);
       setImages(images.filter((img) => img.id !== id));
     } catch (err) {
       console.error("Error al eliminar imagen:", err);
       alert("Error al eliminar imagen");
+    } finally {
+      setOperationLoading(false);
     }
   };
 
-  // Editar
+  // Editar (single, sin cambios)
   const handleEdit = (image) => {
     setEditing(image.id);
     setFormData({ alt: image.alt, desc: image.desc });
-    setPreview(image.url);
-    setFile(null);
+    setFiles([]); // Limpia múltiples para edit
+    setPreviews([image.url]); // Preview single
   };
 
   // Reset
   const resetForm = () => {
     setFormData({ alt: "", desc: "" });
-    setFile(null);
-    setPreview(null);
+    setFiles([]);
+    setPreviews([]);
     setEditing(null);
   };
 
@@ -92,10 +107,20 @@ export default function GalleryManagement() {
     <div className="gallery-management">
       <h2 className="gallery-title">Gestión de Galería</h2>
 
+      {/* Loader global */}
+      {operationLoading && (
+        <div className="global-loader">
+          <div className="circular-progress">
+            <div className="spinner"></div>
+            <p>Procesando {editing ? "edición" : "subida"}...</p>
+          </div>
+        </div>
+      )}
+
       {/* Formulario */}
       <form onSubmit={handleSubmit} className="gallery-form">
         <h3 className="form-title">
-          {editing ? "Editar Imagen" : "Subir Imagen"}
+          {editing ? "Editar Imagen" : "Subir Imágenes (Múltiples)"}
         </h3>
         <input
           type="text"
@@ -104,6 +129,7 @@ export default function GalleryManagement() {
           onChange={(e) => setFormData({ ...formData, alt: e.target.value })}
           className="form-input"
           required
+          disabled={operationLoading}
         />
         <textarea
           placeholder="Descripción"
@@ -112,26 +138,45 @@ export default function GalleryManagement() {
           className="form-textarea"
           rows={3}
           required
+          disabled={operationLoading}
         />
         <input
           type="file"
           accept="image/*"
-          onChange={(e) => setFile(e.target.files[0])}
+          multiple // ✅ Nuevo: permite múltiples
+          onChange={(e) => setFiles(Array.from(e.target.files))} // Array de files
           className="form-file"
+          disabled={operationLoading}
         />
-        {preview && (
+        {previews.length > 0 && (
           <div className="preview-container">
-            <img src={preview} alt="Preview" className="preview-image" />
+            <p>Preview:</p>
+            <div className="previews-grid">
+              {previews.map((url, index) => (
+                <img
+                  key={index}
+                  src={url}
+                  alt={`Preview ${index + 1}`}
+                  className="preview-image"
+                />
+              ))}
+            </div>
+            <small>{previews.length} imagen(es) seleccionada(s)</small>
           </div>
         )}
         <div className="form-actions">
-          <button type="submit" className="btn btn-primary">
-            {editing ? "Actualizar" : "Subir"}
+          <button
+            type="submit"
+            className="btn btn-primary"
+            disabled={operationLoading || files.length === 0}
+          >
+            {editing ? "Actualizar" : `Subir ${files.length || 0} imagen(es)`}
           </button>
           <button
             type="button"
             onClick={resetForm}
             className="btn btn-secondary"
+            disabled={operationLoading}
           >
             Cancelar
           </button>
@@ -154,12 +199,14 @@ export default function GalleryManagement() {
                 <button
                   onClick={() => handleEdit(image)}
                   className="btn btn-edit"
+                  disabled={operationLoading}
                 >
                   Editar
                 </button>
                 <button
                   onClick={() => handleDelete(image.id)}
                   className="btn btn-delete"
+                  disabled={operationLoading}
                 >
                   Eliminar
                 </button>
@@ -169,7 +216,7 @@ export default function GalleryManagement() {
         ))}
       </div>
 
-      {images.length === 0 && (
+      {images.length === 0 && !operationLoading && (
         <p className="no-results">No hay imágenes en la galería.</p>
       )}
     </div>
