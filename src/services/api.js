@@ -129,18 +129,15 @@ export const bookingsAPI = {
 export const galleryAPI = {
   getAll: async (skip = 0, limit = 100) => getData(`/gallery`, { skip, limit }),
 
-  create: async (alt, desc, files) => {
-    // Cambiado: files como array
+  create: async (alt, desc, file) => {
     const form = new FormData();
     form.append("alt", alt);
     form.append("desc", desc);
-    files.forEach((file) => {
-      // Loop para múltiples
-      form.append("files", file); // Backend espera 'files'
-    });
+    if (file) {
+      form.append("file", file);
+    }
     return postFormData("/gallery", form);
   },
-
   update: async (id, alt, desc, file) => {
     const form = new FormData();
     if (alt) form.append("alt", alt);
@@ -151,7 +148,6 @@ export const galleryAPI = {
 
   delete: async (id) => deleteData(`/gallery/${id}`),
 };
-
 export const testimonialsAPI = {
   getAll: async (skip = 0, limit = 100) =>
     getData(`/testimonials`, { skip, limit }),

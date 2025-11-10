@@ -8,8 +8,9 @@ export default function GalleryManagement() {
   const [operationLoading, setOperationLoading] = useState(false);
   const [editing, setEditing] = useState(null);
   const [formData, setFormData] = useState({ alt: "", desc: "" });
-  const [files, setFiles] = useState([]); // Cambiado: array para múltiples
-  const [previews, setPreviews] = useState([]); // Array para previews
+  const [file, setFile] = useState(null);
+  const [preview, setPreview] = useState(null);
+  const [hoveredImage, setHoveredImage] = useState(null); // Nuevo estado para controlar hover
 
   // GET imágenes
   useEffect(() => {
@@ -26,51 +27,52 @@ export default function GalleryManagement() {
       .finally(() => setLoading(false));
   }, []);
 
-  // Previews múltiples
+  // Preview de imagen
   useEffect(() => {
-    if (files.length > 0) {
-      const objectUrls = files.map((file) => URL.createObjectURL(file));
-      setPreviews(objectUrls);
-      return () => objectUrls.forEach((url) => URL.revokeObjectURL(url));
-    } else {
-      setPreviews([]);
+    if (file) {
+      const objectUrl = URL.createObjectURL(file);
+      setPreview(objectUrl);
+      return () => URL.revokeObjectURL(objectUrl);
     }
-  }, [files]);
+  }, [file]);
 
-  // Crear (batch) o actualizar (single)
+  // Manejar hover
+  const handleMouseEnter = (imageId) => {
+    setHoveredImage(imageId);
+  };
+
+  const handleMouseLeave = () => {
+    setHoveredImage(null);
+  };
+
+  // Crear o actualizar
   const handleSubmit = async (e) => {
     e.preventDefault();
     setOperationLoading(true);
     try {
       let response;
       if (editing) {
-        // Single update (mantiene lógica original)
         response = await galleryAPI.update(
           editing,
           formData.alt,
           formData.desc,
-          files[0] || null // Toma el primero si hay
+          file
         );
         setImages(images.map((img) => (img.id === editing ? response : img)));
       } else {
-        // Batch create: múltiples archivos con mismo alt/desc
-        if (files.length === 0) {
-          alert("Selecciona al menos una imagen");
-          return;
-        }
-        response = await galleryAPI.create(formData.alt, formData.desc, files); // Envía array de files
-        setImages([...images, ...response]); // Agrega todas las nuevas
+        response = await galleryAPI.create(formData.alt, formData.desc, file);
+        setImages([...images, response]);
       }
       resetForm();
     } catch (err) {
-      console.error("Error al guardar imágenes:", err);
-      alert("Error al guardar imágenes");
+      console.error("Error al guardar imagen:", err);
+      alert("Error al guardar imagen");
     } finally {
       setOperationLoading(false);
     }
   };
 
-  // Eliminar (sin cambios)
+  // Eliminar
   const handleDelete = async (id) => {
     if (!confirm("¿Eliminar esta imagen?")) return;
     setOperationLoading(true);
@@ -85,19 +87,19 @@ export default function GalleryManagement() {
     }
   };
 
-  // Editar (single, sin cambios)
+  // Editar
   const handleEdit = (image) => {
     setEditing(image.id);
     setFormData({ alt: image.alt, desc: image.desc });
-    setFiles([]); // Limpia múltiples para edit
-    setPreviews([image.url]); // Preview single
+    setPreview(image.url);
+    setFile(null);
   };
 
   // Reset
   const resetForm = () => {
     setFormData({ alt: "", desc: "" });
-    setFiles([]);
-    setPreviews([]);
+    setFile(null);
+    setPreview(null);
     setEditing(null);
   };
 
@@ -107,12 +109,12 @@ export default function GalleryManagement() {
     <div className="gallery-management">
       <h2 className="gallery-title">Gestión de Galería</h2>
 
-      {/* Loader global */}
+      {/* Loader global para operaciones */}
       {operationLoading && (
         <div className="global-loader">
           <div className="circular-progress">
             <div className="spinner"></div>
-            <p>Procesando {editing ? "edición" : "subida"}...</p>
+            <p>Procesando...</p>
           </div>
         </div>
       )}
@@ -120,7 +122,7 @@ export default function GalleryManagement() {
       {/* Formulario */}
       <form onSubmit={handleSubmit} className="gallery-form">
         <h3 className="form-title">
-          {editing ? "Editar Imagen" : "Subir Imágenes (Múltiples)"}
+          {editing ? "Editar Imagen" : "Subir Imagen"}
         </h3>
         <input
           type="text"
@@ -143,34 +145,22 @@ export default function GalleryManagement() {
         <input
           type="file"
           accept="image/*"
-          multiple // ✅ Nuevo: permite múltiples
-          onChange={(e) => setFiles(Array.from(e.target.files))} // Array de files
+          onChange={(e) => setFile(e.target.files[0])}
           className="form-file"
           disabled={operationLoading}
         />
-        {previews.length > 0 && (
+        {preview && (
           <div className="preview-container">
-            <p>Preview:</p>
-            <div className="previews-grid">
-              {previews.map((url, index) => (
-                <img
-                  key={index}
-                  src={url}
-                  alt={`Preview ${index + 1}`}
-                  className="preview-image"
-                />
-              ))}
-            </div>
-            <small>{previews.length} imagen(es) seleccionada(s)</small>
+            <img src={preview} alt="Preview" className="preview-image" />
           </div>
         )}
         <div className="form-actions">
           <button
             type="submit"
             className="btn btn-primary"
-            disabled={operationLoading || files.length === 0}
+            disabled={operationLoading}
           >
-            {editing ? "Actualizar" : `Subir ${files.length || 0} imagen(es)`}
+            {editing ? "Actualizar" : "Subir"}
           </button>
           <button
             type="button"
@@ -186,32 +176,41 @@ export default function GalleryManagement() {
       {/* Galería */}
       <div className="gallery-grid-admin">
         {images.map((image) => (
-          <div key={image.id} className="gallery-item-admin">
+          <div
+            key={image.id}
+            className="gallery-item-admin"
+            onMouseEnter={() => handleMouseEnter(image.id)}
+            onMouseLeave={handleMouseLeave}
+          >
             <img
               src={image.url}
               alt={image.alt}
               className="gallery-image-admin"
             />
-            <div className="gallery-overlay">
-              <h4 className="gallery-alt">{image.alt}</h4>
-              <p className="gallery-desc">{image.desc}</p>
-              <div className="gallery-actions">
-                <button
-                  onClick={() => handleEdit(image)}
-                  className="btn btn-edit"
-                  disabled={operationLoading}
-                >
-                  Editar
-                </button>
-                <button
-                  onClick={() => handleDelete(image.id)}
-                  className="btn btn-delete"
-                  disabled={operationLoading}
-                >
-                  Eliminar
-                </button>
+
+            {/* Overlay que solo se muestra al hacer hover */}
+            {hoveredImage === image.id && (
+              <div className="gallery-overlay">
+                <h4 className="gallery-alt">{image.alt}</h4>
+                <p className="gallery-desc">{image.desc}</p>
+                <div className="gallery-actions">
+                  <button
+                    onClick={() => handleEdit(image)}
+                    className="btn btn-edit"
+                    disabled={operationLoading}
+                  >
+                    Editar
+                  </button>
+                  <button
+                    onClick={() => handleDelete(image.id)}
+                    className="btn btn-delete"
+                    disabled={operationLoading}
+                  >
+                    Eliminar
+                  </button>
+                </div>
               </div>
-            </div>
+            )}
           </div>
         ))}
       </div>
