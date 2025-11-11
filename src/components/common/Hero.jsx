@@ -1,7 +1,7 @@
 // src/components/common/Hero.js
 import "./Hero.css";
 import { useState, useEffect } from "react";
-import { galleryAPI } from "../../services/api";
+import { heroAPI } from "../../services/api";
 
 const Hero = () => {
   const [images, setImages] = useState([]);
@@ -9,22 +9,21 @@ const Hero = () => {
   const [error, setError] = useState(null);
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  // Fetch de imágenes desde DB
+  // Fetch de imágenes solo de categoría hero
   useEffect(() => {
     const fetchHeroImages = async () => {
       try {
         setLoading(true);
         setError(null);
-        const data = await galleryAPI.getAll();
+        const data = await heroAPI.getAll();
         const list = Array.isArray(data) ? data : data.images || data || [];
         if (list.length === 0) {
           setError("No hay imágenes disponibles para el hero");
           return;
         }
 
-        // Mezcla aleatoria
-        const shuffled = [...list].sort(() => Math.random() - 0.5);
-        setImages(shuffled);
+        // No shuffle para hero: mantener orden de DB para slideshow coherente
+        setImages(list);
       } catch (err) {
         console.error("Error al cargar imágenes para hero:", err);
         setError("No se pudieron cargar las imágenes del hero");

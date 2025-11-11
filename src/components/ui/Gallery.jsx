@@ -13,7 +13,8 @@ const Gallery = () => {
       try {
         setLoading(true);
         setError(null);
-        const data = await galleryAPI.getAll();
+        // Solo imágenes de categoría "galeria"
+        const data = await galleryAPI.getAll(undefined, undefined, "galeria");
         const list = Array.isArray(data) ? data : data.images || data || [];
         setImages(list);
       } catch (err) {

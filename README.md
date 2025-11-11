@@ -45,3 +45,4 @@ src/
 ├── main.jsx
 ├── index.css
 └── assets/
+UPDATE users SET role = 'admin' WHERE username = 'Antonio';

@@ -1,5 +1,5 @@
-// const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8000";
-const BASE_URL = "http://localhost:8000";
+// src/services/api.js (actualizado con APIs para hero y mejoras en galleryAPI)
+const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8000";
 
 // ---------- HELPERS ----------
 const getAuthHeaders = () => {
@@ -127,27 +127,58 @@ export const bookingsAPI = {
 };
 
 export const galleryAPI = {
-  getAll: async (skip = 0, limit = 100) => getData(`/gallery`, { skip, limit }),
+  getAll: async (skip = 0, limit = 100, category = "galeria") =>
+    getData(`/gallery`, { skip, limit, category }),
 
-  create: async (alt, desc, file) => {
+  create: async (alt, desc, file, category = "galeria") => {
     const form = new FormData();
     form.append("alt", alt);
     form.append("desc", desc);
+    form.append("category", category);
     if (file) {
       form.append("file", file);
     }
     return postFormData("/gallery", form);
   },
-  update: async (id, alt, desc, file) => {
+  update: async (id, alt, desc, file, category) => {
     const form = new FormData();
-    if (alt) form.append("alt", alt);
-    if (desc) form.append("desc", desc);
+    if (alt !== undefined) form.append("alt", alt);
+    if (desc !== undefined) form.append("desc", desc);
+    if (category !== undefined) form.append("category", category);
     if (file) form.append("file", file);
     return putFormData(`/gallery/${id}`, form);
   },
 
   delete: async (id) => deleteData(`/gallery/${id}`),
 };
+
+// ✅ Nueva API para hero (similar a galleryAPI, pero con endpoints /hero y default category="hero")
+export const heroAPI = {
+  getAll: async (skip = 0, limit = 100, category = "hero") =>
+    getData(`/hero`, { skip, limit, category }),
+
+  create: async (alt, desc, file, category = "hero") => {
+    const form = new FormData();
+    form.append("alt", alt);
+    form.append("desc", desc);
+    form.append("category", category);
+    if (file) {
+      form.append("file", file);
+    }
+    return postFormData("/hero", form);
+  },
+  update: async (id, alt, desc, file, category) => {
+    const form = new FormData();
+    if (alt !== undefined) form.append("alt", alt);
+    if (desc !== undefined) form.append("desc", desc);
+    if (category !== undefined) form.append("category", category);
+    if (file) form.append("file", file);
+    return putFormData(`/hero/${id}`, form);
+  },
+
+  delete: async (id) => deleteData(`/hero/${id}`),
+};
+
 export const testimonialsAPI = {
   getAll: async (skip = 0, limit = 100) =>
     getData(`/testimonials`, { skip, limit }),
