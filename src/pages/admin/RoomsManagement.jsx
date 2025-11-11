@@ -10,8 +10,11 @@ export default function RoomsManagement() {
     name: "",
     description: "",
     price: "",
+    size: "", // ✅ Changed to number for m²
+    bed_type: "",
     is_available: true,
     is_featured: false,
+    alt: "",
   });
   const [newImages, setNewImages] = useState([]);
   const [previews, setPreviews] = useState([]);
@@ -63,13 +66,16 @@ export default function RoomsManagement() {
     form.append("name", formData.name);
     form.append("description", formData.description || "");
     form.append("price", formData.price);
+    form.append("size", formData.size); // ✅ Sends as string/number (backend parses to float)
+    form.append("bed_type", formData.bed_type);
     form.append("is_available", formData.is_available);
     form.append("is_featured", formData.is_featured || false);
+    form.append("alt", formData.alt || "Imagen de habitación");
 
+    newImages.forEach((file) => form.append("files", file));
     newImages.forEach((_, i) =>
       form.append("alt_list", formData.alt || `Imagen ${i + 1}`)
     );
-    newImages.forEach((file) => form.append("files", file));
 
     try {
       if (editing) {
@@ -82,7 +88,11 @@ export default function RoomsManagement() {
       alert("✅ Habitación guardada exitosamente");
     } catch (err) {
       console.error("❌ Error:", err);
-      alert("Error al guardar habitación: " + err.message);
+      const msg = err.message.includes("422")
+        ? JSON.parse(err.message.split(": ")[1])?.detail?.[0]?.msg ||
+          "Validación falló"
+        : err.message;
+      alert("Error al guardar habitación: " + msg);
     } finally {
       setSubmitting(false);
     }
@@ -94,6 +104,9 @@ export default function RoomsManagement() {
       name: "",
       description: "",
       price: "",
+      size: "",
+      bed_type: "",
+      alt: "",
       is_available: true,
       is_featured: false,
     });
@@ -108,6 +121,9 @@ export default function RoomsManagement() {
       name: room.name,
       description: room.description || "",
       price: room.price,
+      size: room.size || "", // ✅ Load as string (number input handles)
+      bed_type: room.bed_type || "",
+      alt: room.images?.[0]?.alt || "",
       is_available: room.is_available,
       is_featured: room.is_featured || false,
     });
@@ -120,21 +136,15 @@ export default function RoomsManagement() {
       setRooms((prev) => prev.filter((r) => r.id !== id));
     } catch (err) {
       console.error(err);
-      /*  mostrar el detalle que envía el servidor  */
       const msg = err.message || err;
       alert("No se pudo eliminar: " + msg);
     }
   };
 
-  // const getAuthHeaders = () => {
-  //   const token = localStorage.getItem("token");
-  //   return token ? { Authorization: `Bearer ${token}` } : {};
-  // };
-
   const handleStatusChange = async (id, newStatus) => {
     try {
       const fd = new FormData();
-      fd.append("is_available", newStatus); // solo el campo que cambia
+      fd.append("is_available", newStatus);
       const updated = await roomsAPI.update(id, fd);
       setRooms((prev) => prev.map((r) => (r.id === id ? updated : r)));
     } catch (err) {
@@ -187,6 +197,36 @@ export default function RoomsManagement() {
           onChange={(e) => setFormData({ ...formData, price: e.target.value })}
           className="form-input"
           required
+        />
+        {/* ✅ Changed to number input for m² */}
+        <input
+          type="number"
+          step="0.1"
+          placeholder="Tamaño en m² (ej: 25.5)"
+          value={formData.size}
+          onChange={(e) => setFormData({ ...formData, size: e.target.value })}
+          className="form-input"
+          required
+        />
+        <select
+          value={formData.bed_type}
+          onChange={(e) =>
+            setFormData({ ...formData, bed_type: e.target.value })
+          }
+          className="form-input"
+          required
+        >
+          <option value="">Seleccionar tipo de cama</option>
+          <option value="queen">Queen</option>
+          <option value="king">King</option>
+          <option value="twin">Twin</option>
+        </select>
+        <input
+          type="text"
+          placeholder="Texto alt para imágenes (opcional)"
+          value={formData.alt}
+          onChange={(e) => setFormData({ ...formData, alt: e.target.value })}
+          className="form-input"
         />
         <label className="form-checkbox">
           <input
@@ -275,6 +315,9 @@ export default function RoomsManagement() {
               )}
               <p className="card-description">{room.description}</p>
               <p className="card-price">Precio: XAF{room.price}/noche</p>
+              <p className="card-meta">
+                Tamaño: {room.size} m² | Cama: {room.bed_type}
+              </p>
               <span
                 className={`status-badge ${
                   room.is_available ? "available" : "occupied"
@@ -327,7 +370,6 @@ export default function RoomsManagement() {
         <p className="no-results">No se encontraron habitaciones.</p>
       )}
 
-      {/* ---------- INDICADOR CIRCULAR CENTRADO ---------- */}
       {submitting && (
         <div className="overlay-loader">
           <div className="spinner" />

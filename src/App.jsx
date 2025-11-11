@@ -28,6 +28,7 @@ function App() {
           <Route path="/restaurant" element={<Restaurant />} />
           <Route path="/rooms" element={<Rooms />} />
           <Route path="/rooms/:roomId" element={<RoomDetails />} />
+          <Route path="/rooms/:tab" element={<Rooms />} />
           <Route
             path="/rooms/:roomId/image/:imageIndex"
             element={<ImageFullView />}
