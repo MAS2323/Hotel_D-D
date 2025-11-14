@@ -1,6 +1,7 @@
 // src/components/common/Hero.js
 import "./Hero.css";
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { heroAPI } from "../../services/api";
 
 const Hero = () => {
@@ -8,6 +9,7 @@ const Hero = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const navigate = useNavigate();
 
   // Fetch de imágenes solo de categoría hero
   useEffect(() => {
@@ -45,6 +47,10 @@ const Hero = () => {
 
     return () => clearInterval(interval);
   }, [images.length, loading, error]);
+
+  const handleViewGallery = () => {
+    navigate("/full-gallery");
+  };
 
   if (loading) {
     return (
@@ -99,7 +105,9 @@ const Hero = () => {
             <p className="hotel-location">
               Malabo, Bioko Norte, Guinea Ecuatorial
             </p>
-            <button className="gallery-btn">📸 Ver la galería</button>
+            <button className="gallery-btn" onClick={handleViewGallery}>
+              📸 Ver la galería
+            </button>
           </div>
 
           {/* Call-to-Action destacado */}

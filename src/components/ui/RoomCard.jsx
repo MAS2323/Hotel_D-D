@@ -29,18 +29,18 @@ const RoomCard = ({ room }) => {
     );
   };
 
-  // Lista de amenidades dividida en grupos para distribución izquierda/derecha
-  const amenitiesLeft = [
+  // Arrays base de amenidades
+  const baseAmenitiesLeft = [
     {
       id: 1,
       icon: "📏",
       label: `Tamaño de habitación: ${room?.size || 25} m²`,
-    },
+    }, // Siempre mostrar (dinámico)
     {
       id: 2,
       icon: "👥",
       label: `Adecuado para ${room?.max_guests || 2} huéspedes`,
-    },
+    }, // Siempre (dinámico)
     { id: 5, icon: "🌅", label: "Área de estar" },
     { id: 6, icon: "🌡️", label: "Aire acondicionado" },
     { id: 7, icon: "🔒", label: "Caja fuerte" },
@@ -49,9 +49,13 @@ const RoomCard = ({ room }) => {
     { id: 10, icon: "🚭", label: "Habitaciones no fumadores" },
   ];
 
-  const amenitiesRight = [
-    { id: 0, icon: "🛏️", label: "Cama doble" },
-    { id: 4, icon: "📺", label: "Televisión de pantalla plana" },
+  const baseAmenitiesRight = [
+    {
+      id: 0,
+      icon: "🛏️",
+      label: room.bed_type === "doble" ? "Cama doble" : "2 camas",
+    }, // Dinámico
+    { id: 4, icon: "📺", label: "Televisión de pantalla plana" }, // Condicional has_tv
     { id: 11, icon: "🛎️", label: "Servicio de despertador" },
     { id: 12, icon: "🔐", label: "Cerradura de seguridad" },
     { id: 13, icon: "📶", label: "Wi-Fi gratuito" },
@@ -59,6 +63,18 @@ const RoomCard = ({ room }) => {
     { id: 15, icon: "🔌", label: "Hervidor" },
     { id: 16, icon: "☕", label: "Máquina de café Nespresso" },
     { id: 17, icon: "📞", label: "Teléfono" },
+  ];
+
+  // Filtrar basadas en room.amenities (solo IDs fijos: excluye 0,1,2,4)
+  const amenitiesLeft = [
+    ...baseAmenitiesLeft.slice(0, 2), // Siempre dinámicas
+    ...baseAmenitiesLeft.slice(2).filter((a) => room.amenities?.[a.id]),
+  ];
+
+  const amenitiesRight = [
+    baseAmenitiesRight[0], // Siempre cama (dinámica)
+    ...(room.has_tv ? [baseAmenitiesRight[1]] : []), // TV condicional
+    ...baseAmenitiesRight.slice(2).filter((a) => room.amenities?.[a.id]),
   ];
 
   return (
@@ -72,12 +88,19 @@ const RoomCard = ({ room }) => {
               alt={room.images[0].alt || room.name}
               className="room-card-image"
             />
+            {/* ← NUEVO: Badge de destacada en la imagen si aplica */}
+            {room.is_featured && (
+              <span className="featured-badge">⭐ Destacada</span>
+            )}
           </div>
         )}
 
         {/* Contenido debajo: Título y detalles */}
         <div className="room-content">
-          <h3 className="room-card-title">{room.name}</h3>
+          {/* ← MODIFICADO: Wrapper flex para nombre izquierda y badge derecha */}
+          <div className="room-card-title-wrapper">
+            <h3 className="room-card-title">{room.name}</h3>
+          </div>
 
           {/* Fila 1: Tamaño (izq) | Huéspedes (der) */}
           <div className="room-details-row">
@@ -177,7 +200,10 @@ const RoomCard = ({ room }) => {
             {/* Contenido principal: Descripción arriba, Amenidades abajo */}
             <div className="modal-main-content">
               <div className="modal-description">
-                <h3 className="modal-room-card-title">{room.name}</h3>
+                <h3 className="modal-room-card-title">
+                  {room.name}
+                  {/* ← NUEVO: Badge de destacada en el modal si aplica */}
+                </h3>
                 <p className="modal-room-card-description">
                   {room.description ||
                     "Con 25m² de espacio, cama doble y todo lo esencial a su alcance, nuestra habitación Comfort con 1 Cama Doble es ideal para dos huéspedes. Despiértese con una taza de café recién hecho de su cafetera Nespresso y relájese tras un día explorando Leeuwarden en un cuarto de baño equipado con una relajante bañera o una refrescante ducha. Sencilla, cómoda y perfecta."}
@@ -192,7 +218,7 @@ const RoomCard = ({ room }) => {
                 </span>
               </div>
 
-              {/* Amenidades debajo del precio, distribuidas izq/der */}
+              {/* Amenidades: Solo las seleccionadas, con checkboxes checked */}
               <div className="amenities-grid">
                 <div className="amenities-left">
                   <ul className="amenities-list">
@@ -201,7 +227,11 @@ const RoomCard = ({ room }) => {
                         <input
                           type="checkbox"
                           id={`amenity-left-${index}`}
-                          checked
+                          checked={
+                            room.amenities?.[amenity.id] ||
+                            [1, 2].includes(amenity.id)
+                          } // Dinámicas siempre checked
+                          disabled // Solo visual, no editable
                         />
                         <label htmlFor={`amenity-left-${index}`}>
                           <span className="amenity-icon">{amenity.icon}</span>
@@ -219,7 +249,12 @@ const RoomCard = ({ room }) => {
                         <input
                           type="checkbox"
                           id={`amenity-right-${index}`}
-                          checked
+                          checked={
+                            room.amenities?.[amenity.id] ||
+                            amenity.id === 0 || // Cama siempre
+                            (amenity.id === 4 && room.has_tv) // TV condicional
+                          }
+                          disabled
                         />
                         <label htmlFor={`amenity-right-${index}`}>
                           <span className="amenity-icon">{amenity.icon}</span>

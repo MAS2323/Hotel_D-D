@@ -10,16 +10,58 @@ export default function RoomsManagement() {
     name: "",
     description: "",
     price: "",
-    size: "", // ✅ Changed to number for m²
+    size: "",
     bed_type: "",
     is_available: true,
     is_featured: false,
     alt: "",
+    amenities: {}, // Nuevo: { "5": true, "6": false, ... }
+    max_guests: 2,
+    has_tv: true,
+    has_balcony: false,
   });
   const [newImages, setNewImages] = useState([]);
   const [previews, setPreviews] = useState([]);
   const [search, setSearch] = useState("");
   const [submitting, setSubmitting] = useState(false);
+
+  // Arrays de amenidades (como proporcionaste)
+  const amenitiesLeft = [
+    {
+      id: 1,
+      icon: "📏",
+      label: `Tamaño de habitación: ${formData.size || 25} m²`, // Dinámico, pero no se selecciona
+    },
+    {
+      id: 2,
+      icon: "👥",
+      label: `Adecuado para ${2} huéspedes`, // Dinámico via max_guests
+    },
+    { id: 5, icon: "🌅", label: "Área de estar" },
+    { id: 6, icon: "🌡️", label: "Aire acondicionado" },
+    { id: 7, icon: "🔒", label: "Caja fuerte" },
+    { id: 8, icon: "🚿", label: "Baño o ducha" },
+    { id: 9, icon: "🛁", label: "Secador de pelo" },
+    { id: 10, icon: "🚭", label: "Habitaciones no fumadores" },
+  ];
+
+  const amenitiesRight = [
+    { id: 0, icon: "🛏️", label: "Cama doble" }, // Dinámico via bed_type
+    { id: 4, icon: "📺", label: "Televisión de pantalla plana" }, // Via has_tv
+    { id: 11, icon: "🛎️", label: "Servicio de despertador" },
+    { id: 12, icon: "🔐", label: "Cerradura de seguridad" },
+    { id: 13, icon: "📶", label: "Wi-Fi gratuito" },
+    { id: 14, icon: "🥤", label: "Minibar gratuito" },
+    { id: 15, icon: "🔌", label: "Hervidor" },
+    { id: 16, icon: "☕", label: "Máquina de café Nespresso" },
+    { id: 17, icon: "📞", label: "Teléfono" },
+  ];
+
+  // Filtrar amenidades fijas (excluir dinámicas: 0,1,2,4)
+  const fixedAmenitiesLeft = amenitiesLeft.filter(
+    (a) => ![1, 2].includes(a.id)
+  );
+  const fixedAmenitiesRight = amenitiesRight.filter((a) => a.id !== 4);
 
   // ---------- CARGAR HABITACIONES ----------
   useEffect(() => {
@@ -45,6 +87,17 @@ export default function RoomsManagement() {
       r.description?.toLowerCase().includes(search.toLowerCase())
   );
 
+  // ---------- MANEJO DE AMENIDADES ----------
+  const handleAmenityChange = (id, checked) => {
+    setFormData((prev) => ({
+      ...prev,
+      amenities: {
+        ...prev.amenities,
+        [id]: checked,
+      },
+    }));
+  };
+
   // ---------- IMÁGENES ----------
   const handleImageChange = (e) => {
     const files = Array.from(e.target.files);
@@ -66,11 +119,15 @@ export default function RoomsManagement() {
     form.append("name", formData.name);
     form.append("description", formData.description || "");
     form.append("price", formData.price);
-    form.append("size", formData.size); // ✅ Sends as string/number (backend parses to float)
+    form.append("size", formData.size);
+    form.append("max_guests", formData.max_guests || 2); // Asumiendo que agregas este campo si no lo tienes
     form.append("bed_type", formData.bed_type);
+    form.append("has_tv", formData.has_tv || true); // Asumiendo campo
     form.append("is_available", formData.is_available);
     form.append("is_featured", formData.is_featured || false);
     form.append("alt", formData.alt || "Imagen de habitación");
+    form.append("amenities", JSON.stringify(formData.amenities || {})); // Nuevo: Enviar como JSON string
+    form.append("has_balcony", formData.has_balcony || false);
 
     newImages.forEach((file) => form.append("files", file));
     newImages.forEach((_, i) =>
@@ -109,6 +166,10 @@ export default function RoomsManagement() {
       alt: "",
       is_available: true,
       is_featured: false,
+      amenities: {}, // Reset
+      max_guests: 2,
+      has_tv: true,
+      has_balcony: false,
     });
     setNewImages([]);
     setPreviews([]);
@@ -121,11 +182,15 @@ export default function RoomsManagement() {
       name: room.name,
       description: room.description || "",
       price: room.price,
-      size: room.size || "", // ✅ Load as string (number input handles)
+      size: room.size || "",
       bed_type: room.bed_type || "",
       alt: room.images?.[0]?.alt || "",
       is_available: room.is_available,
       is_featured: room.is_featured || false,
+      amenities: room.amenities || {}, // Nuevo: Cargar amenidades
+      max_guests: room.max_guests || 2,
+      has_tv: room.has_tv || true,
+      has_balcony: room.has_balcony || false,
     });
   };
 
@@ -198,7 +263,6 @@ export default function RoomsManagement() {
           className="form-input"
           required
         />
-        {/* ✅ Changed to number input for m² */}
         <input
           type="number"
           step="0.1"
@@ -217,6 +281,7 @@ export default function RoomsManagement() {
           required
         >
           <option value="">Seleccionar tipo de cama</option>
+          <option value="doble">Doble</option> {/* Ajusté para matching */}
           <option value="queen">Queen</option>
           <option value="king">King</option>
           <option value="twin">Twin</option>
@@ -248,6 +313,52 @@ export default function RoomsManagement() {
           />
           Habitación Destacada
         </label>
+
+        {/* NUEVA SECCIÓN: Selección de Amenidades */}
+        <h4>Amenidades (selecciona las que aplica)</h4>
+        <div className="amenities-grid">
+          <div className="amenities-left">
+            <ul className="amenities-list">
+              {fixedAmenitiesLeft.map((amenity) => (
+                <li key={amenity.id} className="amenity-item">
+                  <input
+                    type="checkbox"
+                    id={`amenity-left-${amenity.id}`}
+                    checked={formData.amenities[amenity.id] || false}
+                    onChange={(e) =>
+                      handleAmenityChange(amenity.id, e.target.checked)
+                    }
+                  />
+                  <label htmlFor={`amenity-left-${amenity.id}`}>
+                    <span className="amenity-icon">{amenity.icon}</span>
+                    <span className="amenity-label">{amenity.label}</span>
+                  </label>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div className="amenities-right">
+            <ul className="amenities-list">
+              {fixedAmenitiesRight.map((amenity) => (
+                <li key={amenity.id} className="amenity-item">
+                  <input
+                    type="checkbox"
+                    id={`amenity-right-${amenity.id}`}
+                    checked={formData.amenities[amenity.id] || false}
+                    onChange={(e) =>
+                      handleAmenityChange(amenity.id, e.target.checked)
+                    }
+                  />
+                  <label htmlFor={`amenity-right-${amenity.id}`}>
+                    <span className="amenity-icon">{amenity.icon}</span>
+                    <span className="amenity-label">{amenity.label}</span>
+                  </label>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
 
         <h4>Agregar nuevas imágenes</h4>
         <input

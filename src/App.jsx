@@ -15,6 +15,7 @@ import Register from "./pages/admin/Register";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import RoomDetails from "./components/ui/RoomDetails";
 import ImageFullView from "./components/ui/ImageFullView";
+import FullGallery from "./components/ui/FullGallery";
 
 function App() {
   return (
@@ -37,6 +38,7 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/admin/login" element={<Login />} />
           <Route path="/admin/*" element={<AdminDashboard />} />
+          <Route path="/full-gallery/" element={<FullGallery />} />
           {/* Add admin routes if needed */}
         </Routes>
       </Layout>

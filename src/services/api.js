@@ -95,7 +95,7 @@ export const servicesAPI = {
     const form = new FormData();
     form.append("title", title);
     form.append("desc", desc);
-    form.append("icon_file", iconFile);
+    if (iconFile) form.append("file", iconFile);
     return postFormData("/admin/services", form); // false: solo header
   },
 
@@ -103,7 +103,7 @@ export const servicesAPI = {
     const form = new FormData();
     if (title) form.append("title", title);
     if (desc) form.append("desc", desc);
-    if (iconFile) form.append("icon_file", iconFile);
+    if (iconFile) form.append("file", iconFile);
     return putFormData(`/admin/services/${id}`, form); // false
   },
 

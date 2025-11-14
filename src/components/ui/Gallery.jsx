@@ -1,5 +1,6 @@
 // src/components/ui/Gallery.js
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { galleryAPI } from "../../services/api";
 import "./Gallery.css";
 
@@ -7,6 +8,7 @@ const Gallery = () => {
   const [images, setImages] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchImages = async () => {
@@ -68,13 +70,20 @@ const Gallery = () => {
     );
   }
 
+  const displayedImages = images.slice(0, 6); // Dos filas: 3 por fila en desktop
+  const hasMore = images.length > 6;
+
+  const handleViewMore = () => {
+    navigate("/full-gallery");
+  };
+
   return (
     <section className="gallery-section">
       <div className="gallery-container">
         <h2 className="gallery-title">Galería de Aventuras</h2>
         <p className="gallery-subtitle">Descubre la magia de nuestro hotel</p>
         <div className="gallery-grid">
-          {images.map((image, index) => (
+          {displayedImages.map((image, index) => (
             <div key={image.id || index} className="gallery-item">
               <img
                 src={image.url}
@@ -93,7 +102,11 @@ const Gallery = () => {
             </div>
           ))}
         </div>
-        <button className="gallery-view-more">Ver Más Imágenes</button>
+        {hasMore && (
+          <button className="gallery-view-more" onClick={handleViewMore}>
+            Ver Más Imágenes
+          </button>
+        )}
       </div>
     </section>
   );

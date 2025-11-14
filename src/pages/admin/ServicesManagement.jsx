@@ -35,6 +35,14 @@ export default function ServicesManagement() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setOperationLoading(true); // Inicia loader
+
+    // ← NUEVO: Validar archivo requerido
+    if (!iconFile && !editing) {
+      alert("Por favor, selecciona un icono para el servicio");
+      setOperationLoading(false);
+      return;
+    }
+
     try {
       let response;
       if (editing) {
@@ -42,21 +50,26 @@ export default function ServicesManagement() {
           editing,
           formData.title,
           formData.desc,
-          iconFile
+          iconFile // Puede ser null si no se cambia
         );
         setServices(services.map((s) => (s.id === editing ? response : s)));
       } else {
         response = await servicesAPI.create(
           formData.title,
           formData.desc,
-          iconFile
+          iconFile // Requerido para nuevo
         );
         setServices([...services, response]);
       }
       resetForm();
+      alert("✅ Servicio guardado exitosamente");
     } catch (err) {
       console.error("Error al guardar servicio:", err);
-      alert("Error al guardar servicio");
+      const msg = err.message.includes("422")
+        ? JSON.parse(err.message.split(": ")[1])?.detail?.[0]?.msg ||
+          "Validación falló"
+        : err.message;
+      alert("Error al guardar servicio: " + msg);
     } finally {
       setOperationLoading(false); // Detiene loader
     }
@@ -69,9 +82,10 @@ export default function ServicesManagement() {
     try {
       await servicesAPI.delete(id);
       setServices(services.filter((s) => s.id !== id));
+      alert("✅ Servicio eliminado exitosamente");
     } catch (err) {
       console.error("Error al eliminar servicio:", err);
-      alert("Error al eliminar servicio");
+      alert("Error al eliminar servicio: " + (err.message || err));
     } finally {
       setOperationLoading(false); // Detiene loader
     }
@@ -88,6 +102,7 @@ export default function ServicesManagement() {
   const handleEdit = (service) => {
     setEditing(service.id);
     setFormData({ title: service.title, desc: service.desc });
+    setIconFile(null); // Reset file para nuevo upload si se cambia
   };
 
   if (loading)
@@ -145,12 +160,18 @@ export default function ServicesManagement() {
           onChange={(e) => setIconFile(e.target.files[0])}
           className="form-file"
           disabled={operationLoading} // Deshabilita durante loader
+          required={!editing} // Requerido solo para nuevo (edición opcional)
         />
         <div className="form-actions">
           <button
             type="submit"
             className="btn btn-primary"
-            disabled={operationLoading}
+            disabled={
+              operationLoading ||
+              !formData.title ||
+              !formData.desc ||
+              (!iconFile && !editing)
+            }
           >
             {editing ? "Actualizar" : "Crear"}
           </button>

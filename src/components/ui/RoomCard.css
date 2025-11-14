@@ -1,3 +1,31 @@
+/* ← NUEVO: Estilo para el wrapper del título (nombre izquierda, badge derecha) */
+.room-card-title-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.room-card-title {
+  margin: 0; /* Reset margin para flex */
+  font-size: 1em;
+  color: #333;
+  font-weight: 600;
+  flex: 1; /* Ocupa espacio disponible */
+}
+
+.featured-badge-small {
+  background: #ffd700;
+  color: #333;
+  padding: 2px 6px;
+  border-radius: 12px;
+  font-size: 0.8em;
+  font-weight: bold;
+  white-space: nowrap; /* Evita wrap */
+  margin-left: 8px; /* Espacio si no usa flex, pero flex lo maneja */
+}
+
+/* Resto de estilos existentes... */
 .room-card {
   border: 1px solid #ddd;
   border-radius: 8px;
@@ -12,6 +40,7 @@
 .room-image-header {
   width: 100%; /* Imagen full-width arriba */
   height: 180px; /* Altura fija para consistencia */
+  position: relative; /* Para posicionar badge absoluto si es necesario */
 }
 
 .room-card-image {
@@ -20,17 +49,23 @@
   object-fit: cover; /* Cubre todo el área sin distorsión */
 }
 
+.featured-badge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: #ffd700;
+  color: #333;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 0.8em;
+  font-weight: bold;
+  z-index: 1;
+}
+
 .room-content {
   padding: 12px; /* Espaciado interno compacto */
   display: flex;
   flex-direction: column;
-}
-
-.room-card-title {
-  margin: 0 0 8px;
-  font-size: 1em; /* Compacto */
-  color: #333;
-  font-weight: 600;
 }
 
 .room-details-row {
@@ -136,7 +171,19 @@
   .btn-select-tariff {
     margin: 4px 0;
   }
+
+  .room-card-title-wrapper {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+
+  .featured-badge-small {
+    margin-left: 0;
+    align-self: flex-end;
+  }
 }
+
 /* Estilos existentes del RoomCard (mantener)... */
 .modal-overlay {
   position: fixed;
