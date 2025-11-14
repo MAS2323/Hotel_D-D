@@ -16,6 +16,7 @@ import AdminDashboard from "./pages/admin/AdminDashboard";
 import RoomDetails from "./components/ui/RoomDetails";
 import ImageFullView from "./components/ui/ImageFullView";
 import FullGallery from "./components/ui/FullGallery";
+import ApartmentsList from "./components/ui/ApartmentsList";
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
           <Route path="/restaurant" element={<Restaurant />} />
           <Route path="/rooms" element={<Rooms />} />
           <Route path="/rooms/:roomId" element={<RoomDetails />} />
+          <Route path="/departments" element={<ApartmentsList />} />
           <Route path="/rooms/:tab" element={<Rooms />} />
           <Route
             path="/rooms/:roomId/image/:imageIndex"

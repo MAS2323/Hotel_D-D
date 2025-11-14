@@ -1,37 +1,192 @@
-/* src/pages/Rooms.css */
+/* src/pages/Rooms.css (estilos actualizados con posicionamiento absoluto para forzar el botón a la derecha) */
 .rooms-section {
-  padding: 4rem 0;
-  background-color: white;
+  position: relative; /* Para contenedor padre */
+  padding: 2rem 0;
+  background-color: #f8f9fa;
+  min-height: 100vh; /* Asegura altura mínima */
 }
 
 .rooms-container {
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 1rem;
+  position: relative; /* Para posicionar elementos hijos */
+}
+
+.header-section {
+  position: relative; /* Contenedor para posicionamiento absoluto del nav */
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start; /* Alinea al inicio vertical para títulos altos */
+  width: 100%;
+  min-height: 80px; /* Altura mínima para el header */
+  margin-bottom: 2rem;
+  padding: 1rem 0;
+  border-bottom: 2px solid #e9ecef;
+  z-index: 10; /* Asegura que esté por encima del grid */
 }
 
 .rooms-title {
-  font-size: 2rem;
+  margin: 0;
+  font-size: 2.5rem;
   font-weight: bold;
-  text-align: center;
-  margin-bottom: 2rem;
-  color: #180501;
+  color: #333;
+  line-height: 1.2; /* Mejora alineación con texto multilínea si aplica */
+  flex: 1 1 auto; /* Flex grow y shrink */
+  max-width: calc(100% - 200px); /* Limita ancho para dejar espacio al botón */
+  padding-right: 1rem; /* Espacio extra para el botón */
+}
+
+.navigation-link {
+  position: absolute; /* Posicionamiento absoluto para forzar a la derecha */
+  top: 1rem; /* Alinea con el padding del header */
+  right: 0; /* Pega a la derecha del contenedor */
+  margin: 0;
+  z-index: 20; /* Por encima de todo */
+}
+
+.nav-btn {
+  display: inline-block;
+  padding: 12px 24px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white !important; /* Fuerza color texto */
+  text-decoration: none !important; /* Elimina subrayado */
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border: none;
+  cursor: pointer;
+  white-space: nowrap; /* Evita quiebre de línea */
+}
+
+.nav-btn:hover,
+.nav-btn:focus {
+  background: linear-gradient(135deg, #5a67d8 0%, #6b46c1 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  color: white !important;
 }
 
 .rooms-grid {
   display: grid;
-  grid-template-columns: 1fr;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 2rem;
+  margin-top: 1rem;
+  position: relative; /* Separa del header */
+  z-index: 1; /* Debajo del header */
 }
 
-@media (min-width: 768px) {
-  .rooms-grid {
-    grid-template-columns: repeat(2, 1fr);
+/* Responsividad mejorada */
+@media (max-width: 768px) {
+  .header-section {
+    min-height: auto;
+    padding: 0.5rem 0;
+  }
+
+  .rooms-title {
+    font-size: 2rem;
+    max-width: 100%;
+    padding-right: 0;
+    text-align: center;
+    margin-bottom: 1rem;
+  }
+
+  .navigation-link {
+    position: static; /* En móvil, posiciona estático para apilar */
+    right: auto;
+    top: auto;
+    align-self: center;
+    width: 100%;
+    text-align: center;
+  }
+
+  .nav-btn {
+    padding: 10px 20px;
+    font-size: 0.95rem;
+    width: auto;
   }
 }
 
-@media (min-width: 1024px) {
-  .rooms-grid {
-    grid-template-columns: repeat(3, 1fr);
+.loading-container,
+.error-container,
+.empty-container {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: #666;
+}
+
+.loading-spinner {
+  font-style: italic;
+}
+/* src/pages/Rooms.css (estilos para .header-section y elementos hijos) */
+.header-section {
+  display: flex;
+  justify-content: space-between; /* Título a la izquierda, nav a la derecha */
+  align-items: center; /* Alinea verticalmente el h1 y el nav en la misma altura */
+  width: 100%;
+  min-height: 80px; /* Altura mínima para consistencia */
+  margin-bottom: 2rem;
+  padding: 1rem 0;
+  border-bottom: 2px solid #e9ecef; /* Separador visual opcional */
+  gap: 1rem; /* Espacio entre elementos si se necesita */
+}
+
+.rooms-title {
+  margin: 0;
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #333;
+  line-height: 1.2; /* Asegura alineación consistente con el texto del h1 */
+  flex: 1; /* Permite que el título ocupe espacio disponible */
+}
+
+.header-section nav {
+  margin: 0;
+  display: flex;
+  align-items: center; /* Alinea el Link dentro del nav verticalmente */
+}
+
+.header-section nav a {
+  padding: 12px 24px; /* Espaciado interno para el botón */
+  background: linear-gradient(
+    135deg,
+    #667eea 0%,
+    #764ba2 100%
+  ); /* Gradiente atractivo */
+  color: white !important; /* Color texto forzado */
+  text-decoration: none !important; /* Elimina subrayado */
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  white-space: nowrap; /* Evita quiebre de línea */
+}
+
+.header-section nav a:hover,
+.header-section nav a:focus {
+  background: linear-gradient(135deg, #5a67d8 0%, #6b46c1 100%);
+  transform: translateY(-2px); /* Efecto hover sutil */
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  color: white !important;
+}
+
+/* Responsividad: En pantallas pequeñas, apila elementos */
+@media (max-width: 768px) {
+  .header-section {
+    flex-direction: column;
+    align-items: stretch; /* Estira elementos para apilar */
+    gap: 1rem;
+    text-align: center;
+  }
+
+  .rooms-title {
+    font-size: 2rem;
+  }
+
+  .header-section nav {
+    justify-content: center; /* Centra el botón en móvil */
   }
 }

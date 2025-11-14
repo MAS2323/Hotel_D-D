@@ -1,4 +1,4 @@
-// src/services/api.js (actualizado con APIs para hero y mejoras en galleryAPI)
+// src/services/api.js (actualizado con apartmentsAPI en lugar de departmentsAPI)
 const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8000";
 
 // ---------- HELPERS ----------
@@ -243,4 +243,18 @@ export const statsAPI = {
   getRooms: async () => getData("/admin/stats/rooms"),
   getBookings: async () => getData("/admin/stats/bookings"),
   getServices: async () => getData("/admin/stats/services"),
+};
+
+// ✅ Nueva API para apartments (similar a roomsAPI, con soporte para FormData e imágenes)
+export const apartmentsAPI = {
+  getAll: async (skip = 0, limit = 100) =>
+    getData(`/apartments`, { skip, limit }),
+
+  getById: async (id) => getData(`/apartments/${id}`),
+
+  create: async (formData) => postFormData(`/apartments`, formData),
+
+  update: async (id, formData) => putFormData(`/apartments/${id}`, formData),
+
+  delete: async (id) => deleteData(`/apartments/${id}`),
 };

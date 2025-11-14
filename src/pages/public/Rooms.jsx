@@ -1,6 +1,7 @@
-// src/pages/Rooms.js
+// src/pages/Rooms.js (sin cambios mayores, solo asegurando estructura)
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
 import RoomCard from "../../components/ui/RoomCard";
 import { roomsAPI } from "../../services/api";
 import "./Rooms.css";
@@ -16,14 +17,13 @@ const Rooms = () => {
         setLoading(true);
         const response = await roomsAPI.getAll();
 
-        // Maneja la respuesta igual que en RoomsManagement
         const roomsData = Array.isArray(response)
           ? response
           : response.rooms || response.data || [];
 
-        console.log("Rooms data:", roomsData); // Para debug
+        console.log("Rooms data:", roomsData);
         if (roomsData.length > 0) {
-          console.log("First room images:", roomsData[0].images); // Para debug
+          console.log("First room images:", roomsData[0].images);
         }
 
         setRooms(roomsData);
@@ -66,13 +66,20 @@ const Rooms = () => {
   return (
     <section className="rooms-section">
       <div className="rooms-container">
-        <motion.h1
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="rooms-title"
-        >
-          Nuestras Habitaciones
-        </motion.h1>
+        {/* Header con título y enlace a apartamentos - estructura reforzada */}
+        <header className="header-section">
+          <motion.h1
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="rooms-title"
+          >
+            Nuestras Habitaciones
+          </motion.h1>
+          <nav>
+            <Link to="/departments">Ver Apartamentos</Link>
+          </nav>
+        </header>
+
         <div className="rooms-grid">
           {rooms.map((room, index) => (
             <motion.div

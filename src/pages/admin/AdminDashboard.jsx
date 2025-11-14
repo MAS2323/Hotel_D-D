@@ -10,6 +10,7 @@ import ServicesManagement from "./ServicesManagement";
 import RoomsManagement from "./RoomsManagement";
 import BookingsManagement from "./BookingsManagement";
 import GalleryManagement from "./GalleryManagement";
+import ApartmentAdmin from "./ApartmentAdmin";
 
 const AdminDashboard = () => {
   const [user, setUser] = useState(null);
@@ -59,6 +60,7 @@ const AdminDashboard = () => {
             <Route path="/users" element={<UserManagement />} />
             <Route path="/services" element={<ServicesManagement />} />
             <Route path="/rooms" element={<RoomsManagement />} />
+            <Route path="/departments" element={<ApartmentAdmin />} />
             <Route path="/bookings" element={<BookingsManagement />} />
             <Route path="/gallery" element={<GalleryManagement />} />
           </Routes>

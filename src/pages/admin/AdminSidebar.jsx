@@ -31,6 +31,11 @@ const AdminSidebar = ({ onLogout, isOpen, onToggle }) => (
         </Link>
       </li>
       <li>
+        <Link to="/admin/departments" className="sidebar-link">
+          <span className="icon">🛏️</span> Gestión de Departamentos
+        </Link>
+      </li>
+      <li>
         <Link to="/admin/bookings" className="sidebar-link">
           <span className="icon">📅</span> Gestión de Reservas
         </Link>
