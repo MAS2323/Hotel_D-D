@@ -32,7 +32,7 @@ const AdminSidebar = ({ onLogout, isOpen, onToggle }) => (
       </li>
       <li>
         <Link to="/admin/departments" className="sidebar-link">
-          <span className="icon">🛏️</span> Gestión de Departamentos
+          <span className="icon">🏠</span> Gestión de Apartamentos
         </Link>
       </li>
       <li>

@@ -190,12 +190,14 @@ export default function ServicesManagement() {
       <div className="grid-container">
         {filtered.map((service) => (
           <div key={service.id} className="service-card">
-            {service.icon_url && (
+            {service.icon_url ? (
               <img
                 src={service.icon_url}
                 alt={service.title}
                 className="service-icon"
               />
+            ) : (
+              <div className="service-icon-placeholder">🏰</div>
             )}
             <h3 className="card-title">{service.title}</h3>
             <p className="card-desc">{service.desc}</p>

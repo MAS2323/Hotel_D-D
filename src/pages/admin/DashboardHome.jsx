@@ -1,6 +1,7 @@
 // src/components/admin/DashboardHome.js
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import { statsAPI } from "../../services/api";
+import { useNavigate } from "react-router-dom";
 
 const StatCard = ({ icon, number, label, color, onMoreInfo }) => (
   <div className={`stat-card ${color}`}>
@@ -17,42 +18,65 @@ const DashboardHome = () => {
   const [stats, setStats] = useState({
     users: 0,
     rooms: 0,
+    apartments: 0,
     bookings: 0,
     services: 0,
   });
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        const [usersRes, roomsRes, bookingsRes, servicesRes] =
+        setLoading(true);
+        setError(null);
+        const [usersRes, roomsRes, apartmentsRes, bookingsRes, servicesRes] =
           await Promise.all([
-            axios.get("/api/admin/stats/users"),
-            axios.get("/api/admin/stats/rooms"),
-            axios.get("/api/admin/stats/bookings"),
-            axios.get("/api/admin/stats/services"),
+            statsAPI.getUsers(),
+            statsAPI.getRooms(),
+            statsAPI.getApartments(),
+            statsAPI.getBookings(),
+            statsAPI.getServices(),
           ]);
+        // Ajusta a 'total' en lugar de 'count', basado en el error (objeto con key {total})
         setStats({
-          users: usersRes.data.count,
-          rooms: roomsRes.data.count,
-          bookings: bookingsRes.data.count,
-          services: servicesRes.data.count,
+          users: Number(usersRes.total) || 0,
+          rooms: Number(roomsRes.total) || 0,
+          apartments: Number(apartmentsRes.total) || 0,
+          bookings: Number(bookingsRes.total) || 0,
+          services: Number(servicesRes.total) || 0,
         });
       } catch (err) {
         console.error("Error fetching stats:", err);
+        setError(err.message);
+        if (err.message.includes("401")) {
+          alert("Sesión expirada o no autorizado. Redirigiendo al login...");
+          localStorage.removeItem("token");
+          navigate("/admin/login");
+        }
       } finally {
         setLoading(false);
       }
     };
     fetchStats();
-  }, []);
+  }, [navigate]);
 
   const handleMoreInfo = (type) => {
-    alert(`Más info sobre ${type}`); // Placeholder para navegación o modal
+    const routeMap = {
+      Usuarios: "/admin/users",
+      Habitaciones: "/admin/rooms",
+      Apartamentos: "/admin/departments",
+      Reservas: "/admin/bookings",
+      Servicios: "/admin/services",
+    };
+    navigate(routeMap[type]);
   };
 
   if (loading)
     return <div className="loading-spinner">Cargando estadísticas...</div>;
+
+  if (error) return <div className="error-message">Error: {error}</div>;
 
   return (
     <div className="dashboard-home">
@@ -71,6 +95,13 @@ const DashboardHome = () => {
           label="Habitaciones"
           color="green"
           onMoreInfo={() => handleMoreInfo("Habitaciones")}
+        />
+        <StatCard
+          icon="🏠"
+          number={stats.apartments}
+          label="Apartamentos"
+          color="purple"
+          onMoreInfo={() => handleMoreInfo("Apartamentos")}
         />
         <StatCard
           icon="📅"

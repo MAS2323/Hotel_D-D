@@ -1,66 +1,68 @@
-// src/components/sections/ServicesSection.js
-import "./ServicesSection.css";
-
-const ServicesSection = () => {
-  const services = [
-    {
-      icon: "🏰",
-      title: "Habitaciones Temáticas",
-      desc: "Sumérgete en mundos de D&D",
-    },
-    { icon: "🍽️", title: "Restaurante Épico", desc: "Comidas de fantasía" },
-    { icon: "🏊", title: "Piscina Mágica", desc: "Relájate como un hechicero" },
-    { icon: "📶", title: "WiFi Gratuito", desc: "Conecta tu aventura" },
-  ];
-
-  return (
-    <section className="services-section">
-      <div className="services-container">
-        <h2 className="services-title">Nuestros Servicios</h2>
-        <div className="services-grid">
-          {services.map((service, index) => (
-            <div key={index} className="service-item">
-              <span className="service-icon">{service.icon}</span>
-              <h3 className="service-title">{service.title}</h3>
-              <p className="service-desc">{service.desc}</p>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-};
-
-export default ServicesSection;
-
-
-/**
- * // src/components/sections/ServicesSection.js
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+// src/components/sections/ServicesSection.js (actualizado con fetch dinámico desde API)
+import { useState, useEffect } from "react";
+import { servicesAPI } from "../../services/api";
 import "./ServicesSection.css";
 
 const ServicesSection = () => {
   const [services, setServices] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    axios.get('/api/services')
-      .then(response => setServices(response.data))
-      .catch(error => console.error('Error fetching services:', error));
+    const fetchServices = async () => {
+      try {
+        const response = await servicesAPI.getAll();
+        const list = Array.isArray(response)
+          ? response
+          : response.services || [];
+        setServices(list);
+      } catch (err) {
+        console.error("Error fetching services:", err);
+        setServices([]); // Fallback a vacío o array estático si error
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchServices();
   }, []);
+
+  if (loading) {
+    return (
+      <section className="services-section">
+        <div className="services-container">
+          <h2 className="services-title">Nuestros Servicios</h2>
+          <div className="loading-spinner">Cargando servicios...</div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className="services-section">
       <div className="services-container">
         <h2 className="services-title">Nuestros Servicios</h2>
         <div className="services-grid">
-          {services.map((service, index) => (
-            <div key={index} className="service-item">
-              <img src={service.icon_url} alt={service.title} className="service-icon" />
-              <h3 className="service-title">{service.title}</h3>
-              <p className="service-desc">{service.desc}</p>
-            </div>
-          ))}
+          {services.length > 0 ? (
+            services.map((service, index) => (
+              <div key={service.id || index} className="service-item">
+                {service.icon_url ? (
+                  <img
+                    src={service.icon_url}
+                    alt={service.title}
+                    className="service-icon"
+                  />
+                ) : (
+                  <span className="service-icon-placeholder">🏰</span>
+                )}
+                <h3 className="service-title">{service.title}</h3>
+                <p className="service-desc">{service.desc}</p>
+              </div>
+            ))
+          ) : (
+            <p className="no-services">
+              No hay servicios disponibles en este momento.
+            </p>
+          )}
         </div>
       </div>
     </section>
@@ -68,4 +70,3 @@ const ServicesSection = () => {
 };
 
 export default ServicesSection;
- */

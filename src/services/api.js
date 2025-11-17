@@ -1,4 +1,4 @@
-// src/services/api.js (actualizado con apartmentsAPI en lugar de departmentsAPI)
+// src/services/api.js (actualizado: agrega update y delete a bookingsAPI, similar a roomsAPI; usa JSON para consistencia)
 const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8000";
 
 // ---------- HELPERS ----------
@@ -124,6 +124,27 @@ export const bookingsAPI = {
     if (!res.ok) throw new Error(`Error ${res.status}: ${await res.text()}`);
     return res.json();
   },
+
+  // NUEVO: update con JSON (similar a create)
+  update: async (id, bookingData) => {
+    const res = await fetch(`${BASE_URL}/bookings/${id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json", ...getAuthHeaders() },
+      body: JSON.stringify(bookingData),
+    });
+    if (!res.ok) throw new Error(`Error ${res.status}: ${await res.text()}`);
+    return res.json();
+  },
+
+  // NUEVO: delete (sin body)
+  delete: async (id) => {
+    const res = await fetch(`${BASE_URL}/bookings/${id}`, {
+      method: "DELETE",
+      headers: getAuthHeaders(),
+    });
+    if (!res.ok) throw new Error(`Error ${res.status}: ${await res.text()}`);
+    return res.json().catch(() => ({ message: "Deleted" }));
+  },
 };
 
 export const galleryAPI = {
@@ -241,6 +262,7 @@ export const usersAPI = {
 export const statsAPI = {
   getUsers: async () => getData("/admin/stats/users"),
   getRooms: async () => getData("/admin/stats/rooms"),
+  getApartments: async () => getData("/admin/stats/apartments"),
   getBookings: async () => getData("/admin/stats/bookings"),
   getServices: async () => getData("/admin/stats/services"),
 };

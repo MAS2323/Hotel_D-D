@@ -1,4 +1,4 @@
-// src/pages/Booking.js
+// src/pages/Booking.js (sin cambios mayores, solo import y uso)
 import { motion } from "framer-motion";
 import BookingForm from "../../components/forms/BookingForm";
 import "./Booking.css";
@@ -16,7 +16,7 @@ const Booking = () => {
           animate={{ y: 0 }}
           className="booking-title"
         >
-          Reserva tu Habitación
+          Reserva tu Habitación o Apartamento
         </motion.h1>
         <BookingForm />
       </div>

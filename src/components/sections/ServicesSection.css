@@ -1,7 +1,7 @@
-/* src/components/sections/ServicesSection.css */
+/* src/components/sections/ServicesSection.css (mejorado para matching perfecto con imagen: gradiente, rounded, icons grandes, colores temáticos) */
 .services-section {
   padding: 4rem 0;
-  background-color: white;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
 }
 
 .services-container {
@@ -16,6 +16,17 @@
   text-align: center;
   color: #180501;
   margin-bottom: 2rem;
+  position: relative;
+}
+
+.services-title::after {
+  content: "";
+  display: block;
+  width: 60px;
+  height: 3px;
+  background: linear-gradient(135deg, #701705 0%, #a1350a 100%);
+  margin: 0.5rem auto;
+  border-radius: 2px;
 }
 
 .services-grid {
@@ -27,15 +38,46 @@
 .service-item {
   text-align: center;
   padding: 1.5rem;
-  background-color: #f9f9f9;
-  border-radius: 8px;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.9) 0%,
+    rgba(248, 249, 250, 0.8) 100%
+  );
+  border-radius: 12px;
   border: 1px solid #701705;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(112, 23, 5, 0.1);
 }
 
-.service-icon {
+.service-item:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(112, 23, 5, 0.15);
+}
+
+.service-icon,
+.service-icon-placeholder {
   font-size: 3rem;
   display: block;
   margin-bottom: 1rem;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #701705 0%, #a1350a 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+  color: white;
+  box-shadow: 0 4px 12px rgba(112, 23, 5, 0.2);
+  object-fit: contain;
+}
+
+.service-icon {
+  object-fit: contain;
 }
 
 .service-title {
@@ -43,8 +85,53 @@
   font-weight: bold;
   color: #180501;
   margin-bottom: 0.5rem;
+  line-height: 1.2;
 }
 
 .service-desc {
   color: #701705;
+  font-size: 0.95rem;
+  line-height: 1.4;
+}
+
+.no-services {
+  grid-column: 1 / -1;
+  text-align: center;
+  color: #95a5a6;
+  font-size: 1rem;
+  padding: 2rem;
+}
+
+.loading-spinner {
+  text-align: center;
+  color: #701705;
+  font-style: italic;
+  grid-column: 1 / -1;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .services-section {
+    padding: 2rem 0;
+  }
+
+  .services-grid {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .service-item {
+    padding: 1rem;
+  }
+
+  .service-icon,
+  .service-icon-placeholder {
+    font-size: 2.5rem;
+    width: 60px;
+    height: 60px;
+  }
+
+  .service-title {
+    font-size: 1.1rem;
+  }
 }

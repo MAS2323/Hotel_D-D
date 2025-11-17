@@ -1,6 +1,6 @@
-// src/pages/admin/BookingsManagement.jsx
+// src/pages/admin/BookingsManagement.jsx (ajustado para manejar rooms y apartments, búsqueda mejorada, y mostrar nombres de acc)
 import React, { useEffect, useState } from "react";
-import { bookingsAPI } from "../../services/api";
+import { bookingsAPI, roomsAPI, apartmentsAPI } from "../../services/api"; // Agrega apartmentsAPI
 import "./BookingsManagement.css";
 
 export default function BookingsManagement() {
@@ -9,28 +9,49 @@ export default function BookingsManagement() {
   const [editing, setEditing] = useState(null);
   const [formData, setFormData] = useState({
     guest_name: "",
-    email: "",
+    guest_email: "",
     phone: "",
-    room_id: "",
+    accommodation_type: "room", // Default
+    accommodation_id: "",
     check_in: "",
     check_out: "",
     total_price: "",
-    status: "confirmed", // Opciones: confirmed, pending, cancelled
+    status: "confirmed",
   });
-  const [rooms, setRooms] = useState([]); // Para select de room_id
+  const [rooms, setRooms] = useState([]);
+  const [apartments, setApartments] = useState([]);
   const [search, setSearch] = useState("");
   const [submitting, setSubmitting] = useState(false);
 
-  // ---------- CARGAR BOOKINGS Y ROOMS ----------
+  // ---------- CARGAR BOOKINGS, ROOMS Y APARTMENTS ----------
   useEffect(() => {
     fetchBookings();
     fetchRooms();
+    fetchApartments();
   }, []);
 
   const fetchBookings = async () => {
     try {
       const data = await bookingsAPI.getAll();
-      setBookings(Array.isArray(data) ? data : data.bookings || []);
+      // Enriquecer bookings con nombres de accommodations (fetch si no vienen en API)
+      const enriched = await Promise.all(
+        (Array.isArray(data) ? data : data.bookings || []).map(async (b) => {
+          let accName = "";
+          if (b.accommodation_type === "room") {
+            const room = await roomsAPI
+              .getById(b.accommodation_id)
+              .catch(() => ({}));
+            accName = room.name || `Room ID: ${b.accommodation_id}`;
+          } else if (b.accommodation_type === "apartment") {
+            const apt = await apartmentsAPI
+              .getById(b.accommodation_id)
+              .catch(() => ({}));
+            accName = apt.name || `Apt ID: ${b.accommodation_id}`;
+          }
+          return { ...b, accommodation_name: accName };
+        })
+      );
+      setBookings(enriched);
     } catch (err) {
       console.error(err);
       alert("No se pudieron cargar las reservas");
@@ -41,42 +62,63 @@ export default function BookingsManagement() {
 
   const fetchRooms = async () => {
     try {
-      const data = await roomsAPI.getAll(); // Asume roomsAPI existe
+      const data = await roomsAPI.getAll();
       setRooms(Array.isArray(data) ? data : data.rooms || []);
     } catch (err) {
       console.error(err);
     }
   };
 
-  // ---------- BÚSQUEDA ----------
+  const fetchApartments = async () => {
+    try {
+      const data = await apartmentsAPI.getAll(); // Asume apartmentsAPI existe
+      setApartments(Array.isArray(data) ? data : data.apartments || []);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  // ---------- BÚSQUEDA (mejorada para incluir acc name) ----------
   const filtered = bookings.filter(
     (b) =>
       b.guest_name.toLowerCase().includes(search.toLowerCase()) ||
-      b.email.toLowerCase().includes(search.toLowerCase())
+      b.guest_email.toLowerCase().includes(search.toLowerCase()) ||
+      (b.accommodation_name || "").toLowerCase().includes(search.toLowerCase())
   );
 
-  // ---------- SUBMIT ----------
+  // ---------- SUBMIT (con cálculo si es nuevo) ----------
   const handleSubmit = async (e) => {
     e.preventDefault();
     setSubmitting(true);
 
-    const form = new FormData();
-    form.append("guest_name", formData.guest_name);
-    form.append("email", formData.email);
-    form.append("phone", formData.phone);
-    form.append("room_id", formData.room_id);
-    form.append("check_in", formData.check_in);
-    form.append("check_out", formData.check_out);
-    form.append("total_price", formData.total_price);
-    form.append("status", formData.status);
+    let payload = { ...formData };
+    if (!editing) {
+      // Calcular total si es creación
+      const checkInDate = new Date(formData.check_in);
+      const checkOutDate = new Date(formData.check_out);
+      const nights = (checkOutDate - checkInDate) / (1000 * 60 * 60 * 24);
+      let price = 0;
+      if (formData.accommodation_type === "room") {
+        const room = rooms.find(
+          (r) => r.id === parseInt(formData.accommodation_id)
+        );
+        price = room ? room.price : 0;
+      } else {
+        const apt = apartments.find(
+          (a) => a.id === parseInt(formData.accommodation_id)
+        );
+        price = apt ? apt.price_per_night : 0;
+      }
+      payload.total_price = nights * price;
+    }
 
     try {
       if (editing) {
-        await bookingsAPI.update(editing, form);
+        await bookingsAPI.update(editing, payload);
       } else {
-        await bookingsAPI.create(form);
+        await bookingsAPI.create(payload);
       }
-      fetchBookings();
+      fetchBookings(); // Refetch para enriquecer
       resetForm();
       alert("✅ Reserva guardada exitosamente");
     } catch (err) {
@@ -95,9 +137,10 @@ export default function BookingsManagement() {
   const resetForm = () => {
     setFormData({
       guest_name: "",
-      email: "",
+      guest_email: "",
       phone: "",
-      room_id: "",
+      accommodation_type: "room",
+      accommodation_id: "",
       check_in: "",
       check_out: "",
       total_price: "",
@@ -110,9 +153,10 @@ export default function BookingsManagement() {
     setEditing(booking.id);
     setFormData({
       guest_name: booking.guest_name,
-      email: booking.email,
+      guest_email: booking.guest_email,
       phone: booking.phone,
-      room_id: booking.room_id,
+      accommodation_type: booking.accommodation_type,
+      accommodation_id: booking.accommodation_id,
       check_in: booking.check_in,
       check_out: booking.check_out,
       total_price: booking.total_price,
@@ -133,10 +177,10 @@ export default function BookingsManagement() {
 
   const handleStatusChange = async (id, newStatus) => {
     try {
-      const fd = new FormData();
-      fd.append("status", newStatus);
-      const updated = await bookingsAPI.update(id, fd);
-      setBookings((prev) => prev.map((b) => (b.id === id ? updated : b)));
+      const payload = { status: newStatus };
+      const updated = await bookingsAPI.update(id, payload);
+      // Refetch para consistencia, o update local
+      fetchBookings();
     } catch (err) {
       console.error(err);
       alert("Error al cambiar estado: " + err.message);
@@ -151,7 +195,7 @@ export default function BookingsManagement() {
 
       <input
         type="text"
-        placeholder="Buscar por nombre o email…"
+        placeholder="Buscar por nombre, email o alojamiento…"
         value={search}
         onChange={(e) => setSearch(e.target.value)}
         className="search-input"
@@ -175,8 +219,10 @@ export default function BookingsManagement() {
         <input
           type="email"
           placeholder="Email"
-          value={formData.email}
-          onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+          value={formData.guest_email}
+          onChange={(e) =>
+            setFormData({ ...formData, guest_email: e.target.value })
+          }
           className="form-input"
           required
         />
@@ -186,23 +232,54 @@ export default function BookingsManagement() {
           value={formData.phone}
           onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
           className="form-input"
-          required
         />
+
+        {/* Select para tipo */}
         <select
-          value={formData.room_id}
+          value={formData.accommodation_type}
+          onChange={(e) => {
+            setFormData({
+              ...formData,
+              accommodation_type: e.target.value,
+              accommodation_id: "",
+            });
+          }}
+          className="form-input"
+          required
+        >
+          <option value="room">Habitación</option>
+          <option value="apartment">Apartamento</option>
+        </select>
+
+        {/* Select para ID basado en tipo */}
+        <select
+          value={formData.accommodation_id}
           onChange={(e) =>
-            setFormData({ ...formData, room_id: e.target.value })
+            setFormData({ ...formData, accommodation_id: e.target.value })
           }
           className="form-input"
           required
         >
-          <option value="">Seleccionar habitación</option>
-          {rooms.map((room) => (
-            <option key={room.id} value={room.id}>
-              {room.name} ({room.price} XAF/noche)
-            </option>
-          ))}
+          <option value="">
+            Seleccionar{" "}
+            {formData.accommodation_type === "room"
+              ? "habitación"
+              : "apartamento"}
+          </option>
+          {formData.accommodation_type === "room" &&
+            rooms.map((room) => (
+              <option key={room.id} value={room.id}>
+                {room.name} ({room.price} XAF/noche)
+              </option>
+            ))}
+          {formData.accommodation_type === "apartment" &&
+            apartments.map((apt) => (
+              <option key={apt.id} value={apt.id}>
+                {apt.name} ({apt.price_per_night} XAF/noche)
+              </option>
+            ))}
         </select>
+
         <input
           type="date"
           placeholder="Check-in"
@@ -272,10 +349,11 @@ export default function BookingsManagement() {
               </span>
             </div>
             <p className="card-meta">
-              Email: {booking.email} | Tel: {booking.phone}
+              Email: {booking.guest_email} | Tel: {booking.phone}
             </p>
             <p className="card-meta">
-              Habitación ID: {booking.room_id} | Check-in: {booking.check_in} |
+              Alojamiento: {booking.accommodation_name} (
+              {booking.accommodation_type}) | Check-in: {booking.check_in} |
               Check-out: {booking.check_out}
             </p>
             <p className="card-price">Total: XAF {booking.total_price}</p>
