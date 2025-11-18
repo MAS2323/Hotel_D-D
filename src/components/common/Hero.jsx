@@ -52,6 +52,10 @@ const Hero = () => {
     navigate("/full-gallery");
   };
 
+  const handleBooking = () => {
+    navigate("/booking");
+  };
+
   if (loading) {
     return (
       <section className="hero">
@@ -113,7 +117,9 @@ const Hero = () => {
           {/* Call-to-Action destacado */}
           <div className="cta-section">
             <p className="cta-text">¡Reserva tu aventura ahora!</p>
-            <button className="cta-button">Haz tu reserva</button>
+            <button className="cta-button" onClick={handleBooking}>
+              Haz tu reserva
+            </button>
           </div>
         </div>
       </div>

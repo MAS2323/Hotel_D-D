@@ -1,3 +1,4 @@
+// src/components/admin/AdminDashboard.jsx (actualizado: agrega import y Route para MenuManagement)
 import React, { useState, useEffect } from "react";
 import { Routes, Route, Link, useNavigate } from "react-router-dom";
 import "./AdminDashboard.css";
@@ -11,6 +12,7 @@ import RoomsManagement from "./RoomsManagement";
 import BookingsManagement from "./BookingsManagement";
 import GalleryManagement from "./GalleryManagement";
 import ApartmentAdmin from "./ApartmentAdmin";
+import MenuManagement from "./MenuManagement";
 
 const AdminDashboard = () => {
   const [user, setUser] = useState(null);
@@ -62,6 +64,8 @@ const AdminDashboard = () => {
             <Route path="/rooms" element={<RoomsManagement />} />
             <Route path="/departments" element={<ApartmentAdmin />} />
             <Route path="/bookings" element={<BookingsManagement />} />
+            <Route path="/menu" element={<MenuManagement />} />{" "}
+            {/* ← NUEVO Route */}
             <Route path="/gallery" element={<GalleryManagement />} />
           </Routes>
         </main>

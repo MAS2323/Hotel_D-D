@@ -1,3 +1,4 @@
+// src/components/admin/AdminSidebar.js (actualizado: agrega link para Gestión de Menú)
 import React from "react";
 import { Link } from "react-router-dom";
 
@@ -38,6 +39,13 @@ const AdminSidebar = ({ onLogout, isOpen, onToggle }) => (
       <li>
         <Link to="/admin/bookings" className="sidebar-link">
           <span className="icon">📅</span> Gestión de Reservas
+        </Link>
+      </li>
+      <li>
+        <Link to="/admin/menu" className="sidebar-link">
+          {" "}
+          {/* ← NUEVO */}
+          <span className="icon">🍽️</span> Gestión de Menú
         </Link>
       </li>
       <li>

@@ -17,6 +17,7 @@ import RoomDetails from "./components/ui/RoomDetails";
 import ImageFullView from "./components/ui/ImageFullView";
 import FullGallery from "./components/ui/FullGallery";
 import ApartmentsList from "./components/ui/ApartmentsList";
+import MenuView from "./components/sections/MenuView";
 
 function App() {
   return (
@@ -40,6 +41,7 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/admin/login" element={<Login />} />
           <Route path="/admin/*" element={<AdminDashboard />} />
+          <Route path="/menu" element={<MenuView />} />
           <Route path="/full-gallery/" element={<FullGallery />} />
           {/* Add admin routes if needed */}
         </Routes>

@@ -21,6 +21,7 @@ const DashboardHome = () => {
     apartments: 0,
     bookings: 0,
     services: 0,
+    menu: 0,
   });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -31,14 +32,21 @@ const DashboardHome = () => {
       try {
         setLoading(true);
         setError(null);
-        const [usersRes, roomsRes, apartmentsRes, bookingsRes, servicesRes] =
-          await Promise.all([
-            statsAPI.getUsers(),
-            statsAPI.getRooms(),
-            statsAPI.getApartments(),
-            statsAPI.getBookings(),
-            statsAPI.getServices(),
-          ]);
+        const [
+          usersRes,
+          roomsRes,
+          apartmentsRes,
+          bookingsRes,
+          servicesRes,
+          menuRes,
+        ] = await Promise.all([
+          statsAPI.getUsers(),
+          statsAPI.getRooms(),
+          statsAPI.getApartments(),
+          statsAPI.getBookings(),
+          statsAPI.getServices(),
+          statsAPI.getMenuItems(), // ← NUEVO: fetch count de ítems del menú
+        ]);
         // Ajusta a 'total' en lugar de 'count', basado en el error (objeto con key {total})
         setStats({
           users: Number(usersRes.total) || 0,
@@ -46,6 +54,7 @@ const DashboardHome = () => {
           apartments: Number(apartmentsRes.total) || 0,
           bookings: Number(bookingsRes.total) || 0,
           services: Number(servicesRes.total) || 0,
+          menu: Number(menuRes.total) || 0, // ← NUEVO
         });
       } catch (err) {
         console.error("Error fetching stats:", err);
@@ -69,6 +78,7 @@ const DashboardHome = () => {
       Apartamentos: "/admin/departments",
       Reservas: "/admin/bookings",
       Servicios: "/admin/services",
+      Menú: "/admin/menu", // ← NUEVO
     };
     navigate(routeMap[type]);
   };
@@ -116,6 +126,13 @@ const DashboardHome = () => {
           label="Servicios"
           color="red"
           onMoreInfo={() => handleMoreInfo("Servicios")}
+        />
+        <StatCard
+          icon="🍽️"
+          number={stats.menu}
+          label="Menú"
+          color="orange"
+          onMoreInfo={() => handleMoreInfo("Menú")}
         />
       </div>
     </div>

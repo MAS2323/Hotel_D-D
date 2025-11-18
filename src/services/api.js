@@ -1,4 +1,4 @@
-// src/services/api.js (actualizado: agrega update y delete a bookingsAPI, similar a roomsAPI; usa JSON para consistencia)
+// src/services/api.js (actualizado: cambia restaurantAPI.createMenu y updateMenu para aceptar objeto menuData + file opcional, con validaciones para required fields en create, y parseFloat para price)
 const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8000";
 
 // ---------- HELPERS ----------
@@ -258,6 +258,88 @@ export const usersAPI = {
   },
 };
 
+// src/services/api.js (actualizado: agrega create y update para restaurant usando FormData, similar a createMenu)
+export const restaurantAPI = {
+  get: async () => getData("/restaurant/"),
+  getMenu: async () => getData("/restaurant/menu"),
+  create: async (title, description, file) => {
+    if (!title || !description) {
+      throw new Error("Título y descripción son requeridos");
+    }
+    if (!file) {
+      throw new Error("La imagen es requerida");
+    }
+    const form = new FormData();
+    form.append("title", title);
+    form.append("description", description);
+    form.append("file", file);
+    return postFormData("/restaurant", form);
+  },
+  update: async (id, title, description, file) => {
+    const form = new FormData();
+    if (title !== undefined) form.append("title", title);
+    if (description !== undefined) form.append("description", description);
+    if (file) form.append("file", file);
+    return putFormData(`/restaurant/${id}`, form);
+  },
+  createMenu: async (menuData, file) => {
+    // Validaciones para campos requeridos
+    if (
+      !menuData ||
+      !menuData.name ||
+      !menuData.description ||
+      menuData.price === undefined ||
+      menuData.price === null ||
+      !menuData.category
+    ) {
+      throw new Error(
+        "Todos los campos requeridos (name, description, price, category) deben estar presentes"
+      );
+    }
+    const numPrice = parseFloat(menuData.price);
+    if (isNaN(numPrice)) {
+      throw new Error("El precio debe ser un número válido");
+    }
+    if (!file) {
+      throw new Error("El archivo de imagen es requerido");
+    }
+
+    const form = new FormData();
+    form.append("name", menuData.name);
+    form.append("description", menuData.description);
+    form.append("price", numPrice);
+    form.append("category", menuData.category);
+    form.append("file", file);
+    return postFormData("/restaurant/menu", form);
+  },
+  updateMenu: async (id, menuData, file) => {
+    const form = new FormData();
+    if (menuData) {
+      if (menuData.name !== undefined) form.append("name", menuData.name);
+      if (menuData.description !== undefined)
+        form.append("description", menuData.description);
+      if (menuData.price !== undefined && menuData.price !== null) {
+        const numPrice = parseFloat(menuData.price);
+        if (!isNaN(numPrice)) {
+          form.append("price", numPrice);
+        }
+      }
+      if (menuData.category !== undefined)
+        form.append("category", menuData.category);
+    }
+    if (file) form.append("file", file);
+    return putFormData(`/restaurant/menu/${id}`, form);
+  },
+  deleteMenu: async (id) => {
+    const res = await fetch(`${BASE_URL}/restaurant/menu/${id}`, {
+      method: "DELETE",
+      headers: getAuthHeaders(),
+    });
+    if (!res.ok) throw new Error(`Error ${res.status}: ${await res.text()}`);
+    return res.json().catch(() => ({ message: "Deleted" }));
+  },
+};
+
 // ✅ API para estadísticas del dashboard (si las necesitas)
 export const statsAPI = {
   getUsers: async () => getData("/admin/stats/users"),
@@ -265,6 +347,7 @@ export const statsAPI = {
   getApartments: async () => getData("/admin/stats/apartments"),
   getBookings: async () => getData("/admin/stats/bookings"),
   getServices: async () => getData("/admin/stats/services"),
+  getMenuItems: async () => getData("/admin/stats/menu"),
 };
 
 // ✅ Nueva API para apartments (similar a roomsAPI, con soporte para FormData e imágenes)
