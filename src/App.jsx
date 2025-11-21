@@ -6,7 +6,7 @@ import Home from "./pages/public/Home";
 import About from "./pages/public/About";
 import Booking from "./pages/public/Booking";
 import Contact from "./pages/public/Contact";
-import Restaurant from "./pages/public/Restaurant";
+// import Restaurant from "./pages/public/Restaurant";
 import Rooms from "./pages/public/Rooms";
 import Services from "./pages/public/Services";
 import "./App.css";
@@ -18,6 +18,9 @@ import ImageFullView from "./components/ui/ImageFullView";
 import FullGallery from "./components/ui/FullGallery";
 import ApartmentsList from "./components/ui/ApartmentsList";
 import MenuView from "./components/sections/MenuView";
+import SubmitTestimonial from "./pages/public/SubmitTestimonial";
+import PropertyDetails from "./components/ui/PropertyDetails";
+import UserLogin from "./pages/public/UserLogin";
 
 function App() {
   return (
@@ -28,7 +31,7 @@ function App() {
           <Route path="/about" element={<About />} />
           <Route path="/booking" element={<Booking />} />
           <Route path="/contact" element={<Contact />} />
-          <Route path="/restaurant" element={<Restaurant />} />
+          {/* <Route path="/restaurant" element={<Restaurant />} /> */}
           <Route path="/rooms" element={<Rooms />} />
           <Route path="/rooms/:roomId" element={<RoomDetails />} />
           <Route path="/departments" element={<ApartmentsList />} />
@@ -39,10 +42,13 @@ function App() {
           />
           <Route path="/services" element={<Services />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/submit-testimonial" element={<SubmitTestimonial />} />
+          <Route path="/login" element={<UserLogin />} />
           <Route path="/admin/login" element={<Login />} />
           <Route path="/admin/*" element={<AdminDashboard />} />
           <Route path="/menu" element={<MenuView />} />
           <Route path="/full-gallery/" element={<FullGallery />} />
+          <Route path="/apartments/:id" element={<PropertyDetails />} />
           {/* Add admin routes if needed */}
         </Routes>
       </Layout>

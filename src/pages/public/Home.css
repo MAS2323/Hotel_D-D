@@ -28,7 +28,28 @@
   grid-template-columns: 1fr;
   gap: 2rem;
 }
+/* src/pages/Home.css (actualizado: agrega estilos para submit-testimonial-section) */
+.submit-testimonial-section {
+  margin-top: 2rem;
+  text-align: center;
+}
 
+.submit-testimonial-btn {
+  display: inline-block;
+  background: linear-gradient(135deg, #701705, #a52a2a);
+  color: white;
+  padding: 1rem 2rem;
+  border-radius: 50px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.submit-testimonial-btn:hover {
+  background: linear-gradient(135deg, #180501, #701705);
+  transform: translateY(-2px);
+  color: white;
+}
 @media (min-width: 768px) {
   .home-rooms-grid {
     grid-template-columns: repeat(3, 1fr);

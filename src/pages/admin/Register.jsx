@@ -1,22 +1,23 @@
-// src/pages/Register.jsx (o src/pages/auth/Register.jsx si prefieres una subcarpeta)
+// src/pages/Register.jsx (actualizado: maneja redirect URL desde query params, redirige de vuelta a SubmitTestimonial después del registro exitoso)
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { usersAPI } from "../../services/api";
-import { useAuth } from "../../hooks/useAuth"; // Importa useAuth para login automático
-import "./Register.css"; // Estilos personalizados similares a Login
+import { useAuth } from "../../hooks/useAuth";
+import "./Register.css";
 
 const Register = () => {
   const [userData, setUserData] = useState({
     username: "",
     email: "",
     password: "",
-    // Agrega más campos si el schema UserCreate lo requiere (e.g., name, phone)
   });
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
-  const { login } = useAuth(); // Hook para setear el token
+  const { login } = useAuth();
+  const [searchParams] = useSearchParams();
+  const redirect = searchParams.get("redirect");
 
   const handleChange = (e) => {
     setUserData({ ...userData, [e.target.name]: e.target.value });
@@ -35,14 +36,17 @@ const Register = () => {
     }
 
     try {
-      // Llama al endpoint real de register
       const response = await usersAPI.register(userData);
 
-      // En éxito, loguea automáticamente con el token y redirige
       login(response.access_token);
       setSuccess("¡Registro exitoso! Bienvenido al Hotel D&D.");
       setTimeout(() => {
-        navigate("/admin"); // O a "/" si no es solo para admin
+        // Redirige a la URL de origen si existe, sino a home
+        if (redirect) {
+          navigate(decodeURIComponent(redirect));
+        } else {
+          navigate("/"); // O a "/admin" si es para admin
+        }
       }, 2000);
     } catch (err) {
       setError(err.message || "Error al registrar usuario. Intenta de nuevo.");
@@ -104,7 +108,7 @@ const Register = () => {
               placeholder="Contraseña"
               value={userData.password}
               onChange={(e) => {
-                const truncated = e.target.value.slice(0, 72); // Trunca a 72 chars (aprox bytes)
+                const truncated = e.target.value.slice(0, 72);
                 setUserData({ ...userData, password: truncated });
               }}
               required
@@ -125,7 +129,7 @@ const Register = () => {
 
         <p className="register-hint">
           ¿Ya tienes cuenta?{" "}
-          <a href="/admin/login" className="register-link">
+          <a href="/login" className="register-link">
             Inicia sesión aquí
           </a>
         </p>

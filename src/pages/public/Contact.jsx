@@ -1,6 +1,8 @@
-// src/pages/Contact.js
 import { motion } from "framer-motion";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../hooks/useAuth";
+import { contactAPI } from "../../services/api";
 import "./Contact.css";
 
 const Contact = () => {
@@ -9,15 +11,44 @@ const Contact = () => {
     email: "",
     message: "",
   });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const { isAuthenticated } = useAuth();
+  const navigate = useNavigate();
+
+  // Redirige a /login si no está autenticado
+  useEffect(() => {
+    if (!isAuthenticated) {
+      navigate("/login");
+    }
+  }, [isAuthenticated, navigate]);
+
+  if (!isAuthenticated) {
+    return null;
+  }
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+    setError("");
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    alert("¡Mensaje enviado! Te contactaremos pronto.");
-    setFormData({ name: "", email: "", message: "" });
+    setLoading(true);
+    setError("");
+
+    try {
+      const data = await contactAPI.create(formData); // ✅ Usa el API centralizado (envía a BASE_URL/contact)
+      alert(data.message || "¡Mensaje enviado! Te contactaremos pronto.");
+      setFormData({ name: "", email: "", message: "" });
+    } catch (err) {
+      console.error("Error:", err);
+      setError(
+        err.message || "Error al enviar el mensaje. Inténtalo de nuevo."
+      );
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -76,6 +107,7 @@ const Contact = () => {
               value={formData.name}
               onChange={handleChange}
               required
+              disabled={loading}
             />
             <input
               type="email"
@@ -84,6 +116,7 @@ const Contact = () => {
               value={formData.email}
               onChange={handleChange}
               required
+              disabled={loading}
             />
             <textarea
               name="message"
@@ -92,9 +125,22 @@ const Contact = () => {
               value={formData.message}
               onChange={handleChange}
               required
+              disabled={loading}
             ></textarea>
-            <button type="submit" className="contact-submit-btn">
-              Enviar Mensaje
+            {error && (
+              <p
+                className="error-message"
+                style={{ color: "red", fontSize: "14px" }}
+              >
+                {error}
+              </p>
+            )}
+            <button
+              type="submit"
+              className="contact-submit-btn"
+              disabled={loading}
+            >
+              {loading ? "Enviando..." : "Enviar Mensaje"}
             </button>
           </motion.form>
         </div>

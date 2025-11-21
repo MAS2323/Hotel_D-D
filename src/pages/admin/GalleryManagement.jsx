@@ -1,3 +1,4 @@
+// src/components/admin/GalleryManagement.jsx (actualizado: botones siempre visibles, sin transición de hover)
 import React, { useEffect, useState } from "react";
 import { galleryAPI, heroAPI } from "../../services/api";
 import "./GalleryManagement.css";
@@ -30,7 +31,6 @@ export default function GalleryManagement() {
         setLoading(false);
       }
     };
-
     fetchImages();
   }, [activeTab, currentAPI]);
 
@@ -123,7 +123,6 @@ export default function GalleryManagement() {
   return (
     <div className="gallery-management">
       <h2 className="gallery-title">{getTitle()}</h2>
-
       {/* Tabs para categorías */}
       <div className="tabs">
         <button
@@ -141,7 +140,6 @@ export default function GalleryManagement() {
           Hero
         </button>
       </div>
-
       {/* Loader global para operaciones */}
       {operationLoading && (
         <div className="global-loader">
@@ -151,7 +149,6 @@ export default function GalleryManagement() {
           </div>
         </div>
       )}
-
       {/* Formulario */}
       <form onSubmit={handleSubmit} className="gallery-form">
         <h3 className="form-title">
@@ -205,7 +202,6 @@ export default function GalleryManagement() {
           </button>
         </div>
       </form>
-
       {/* Galería */}
       <div className="gallery-grid-admin">
         {images.map((image) => (
@@ -215,7 +211,6 @@ export default function GalleryManagement() {
               alt={image.alt}
               className="gallery-image-admin"
             />
-
             {/* Overlay siempre visible con acciones pegadas */}
             <div className="gallery-overlay">
               <div className="overlay-content">
@@ -242,7 +237,6 @@ export default function GalleryManagement() {
           </div>
         ))}
       </div>
-
       {images.length === 0 && !operationLoading && (
         <p className="no-results">
           No hay imágenes en {activeTab}. Sube la primera arriba.

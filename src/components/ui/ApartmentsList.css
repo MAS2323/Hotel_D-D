@@ -14,16 +14,16 @@
 }
 
 .header-section {
-  position: relative;
+  position: relative; /* Contenedor para posicionamiento absoluto del nav */
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
+  align-items: flex-start; /* Alinea al inicio vertical para títulos altos */
   width: 100%;
-  min-height: 80px;
+  min-height: 80px; /* Altura mínima para el header */
   margin-bottom: 2rem;
   padding: 1rem 0;
   border-bottom: 2px solid #e9ecef;
-  z-index: 10;
+  z-index: 10; /* Asegura que esté por encima del grid */
 }
 
 .apartments-title {

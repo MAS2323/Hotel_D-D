@@ -1,5 +1,6 @@
 // src/services/api.js (actualizado: cambia restaurantAPI.createMenu y updateMenu para aceptar objeto menuData + file opcional, con validaciones para required fields en create, y parseFloat para price)
-const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8000";
+const BASE_URL =
+  import.meta.env.VITE_API_URL || "https://backend-hotel-dd.onrender.com";
 
 // ---------- HELPERS ----------
 const getAuthHeaders = () => {
@@ -20,6 +21,18 @@ const buildUrl = (url, params = {}) => {
   return finalUrl; // NO agrega token/db
 };
 
+// ✅ Nueva API para contacto (usa JSON, similar a bookingsAPI.create)
+export const contactAPI = {
+  create: async (contactData) => {
+    const res = await fetch(`${BASE_URL}/contact`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", ...getAuthHeaders() },
+      body: JSON.stringify(contactData),
+    });
+    if (!res.ok) throw new Error(`Error ${res.status}: ${await res.text()}`);
+    return res.json();
+  },
+};
 // ---------- CORE ----------
 const getData = async (url, params = {}, headers = {}) => {
   const finalUrl = buildUrl(url, params); // Solo skip/limit en query
@@ -200,22 +213,6 @@ export const heroAPI = {
   delete: async (id) => deleteData(`/hero/${id}`),
 };
 
-export const testimonialsAPI = {
-  getAll: async (skip = 0, limit = 100) =>
-    getData(`/testimonials`, { skip, limit }),
-
-  create: async (testimonialData) => {
-    const res = await fetch(`${BASE_URL}/testimonials`, {
-      // URL limpia
-      method: "POST",
-      headers: { "Content-Type": "application/json", ...getAuthHeaders() },
-      body: JSON.stringify(testimonialData),
-    });
-    if (!res.ok) throw new Error(`Error ${res.status}: ${await res.text()}`);
-    return res.json();
-  },
-};
-
 export const usersAPI = {
   register: async (userData) => {
     const res = await fetch(`${BASE_URL}/users/`, {
@@ -258,6 +255,30 @@ export const usersAPI = {
   },
 };
 
+// src/services/api.js (actualizado: agrega delete a testimonialsAPI)
+export const testimonialsAPI = {
+  getAll: async (skip = 0, limit = 100) =>
+    getData(`/testimonials`, { skip, limit }),
+
+  create: async (testimonialData) => {
+    const res = await fetch(`${BASE_URL}/testimonials`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", ...getAuthHeaders() },
+      body: JSON.stringify(testimonialData),
+    });
+    if (!res.ok) throw new Error(`Error ${res.status}: ${await res.text()}`);
+    return res.json();
+  },
+
+  delete: async (id) => {
+    const res = await fetch(`${BASE_URL}/testimonials/${id}`, {
+      method: "DELETE",
+      headers: getAuthHeaders(),
+    });
+    if (!res.ok) throw new Error(`Error ${res.status}: ${await res.text()}`);
+    return res.json().catch(() => ({ message: "Deleted" }));
+  },
+};
 // src/services/api.js (actualizado: agrega create y update para restaurant usando FormData, similar a createMenu)
 export const restaurantAPI = {
   get: async () => getData("/restaurant/"),

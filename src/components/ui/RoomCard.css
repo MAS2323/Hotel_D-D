@@ -1,166 +1,135 @@
-/* ← NUEVO: Estilo para el wrapper del título (nombre izquierda, badge derecha) */
-.room-card-title-wrapper {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 8px;
-}
+/* src/components/ui/RoomCard.css - Estilos completos y mejorados para RoomCard, con énfasis en carusel grande y visualización completa de imágenes */
 
-.room-card-title {
-  margin: 0; /* Reset margin para flex */
-  font-size: 1em;
-  color: #333;
-  font-weight: 600;
-  flex: 1; /* Ocupa espacio disponible */
-}
-
-.featured-badge-small {
-  background: #ffd700;
-  color: #333;
-  padding: 2px 6px;
-  border-radius: 12px;
-  font-size: 0.8em;
-  font-weight: bold;
-  white-space: nowrap; /* Evita wrap */
-  margin-left: 8px; /* Espacio si no usa flex, pero flex lo maneja */
-}
-
-/* Resto de estilos existentes... */
+/* Estilos del card principal */
 .room-card {
   border: 1px solid #ddd;
-  border-radius: 8px;
+  border-radius: 12px;
   overflow: hidden;
   width: 100%;
-  max-width: 400px; /* Compacto, no largo */
-  margin: 10px 0;
+  max-width: 350px; /* Más compacto horizontalmente */
+  margin: 1rem auto;
   background: white;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
 }
 
 .room-image-header {
-  width: 100%; /* Imagen full-width arriba */
-  height: 180px; /* Altura fija para consistencia */
-  position: relative; /* Para posicionar badge absoluto si es necesario */
+  width: 100%;
+  height: 220px; /* Más grande para dominar el card como en la imagen */
+  position: relative;
 }
 
 .room-card-image {
   width: 100%;
   height: 100%;
-  object-fit: cover; /* Cubre todo el área sin distorsión */
+  object-fit: cover; /* Cubre el área completa sin distorsión */
 }
 
 .featured-badge {
   position: absolute;
-  top: 10px;
-  right: 10px;
-  background: #ffd700;
+  top: 12px;
+  right: 12px;
+  background: linear-gradient(135deg, #ffd700, #ffed4e);
   color: #333;
-  padding: 4px 8px;
-  border-radius: 12px;
-  font-size: 0.8em;
+  padding: 6px 10px;
+  border-radius: 20px;
+  font-size: 0.85em;
   font-weight: bold;
   z-index: 1;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
 .room-content {
-  padding: 12px; /* Espaciado interno compacto */
+  padding: 1rem; /* Espaciado compacto */
   display: flex;
   flex-direction: column;
+  flex: 1;
+}
+
+.room-card-title {
+  margin: 0 0 0.75rem 0;
+  font-size: 1.1em;
+  color: #333;
+  font-weight: 700;
+  text-align: center;
+  line-height: 1.3;
 }
 
 .room-details-row {
   display: flex;
-  justify-content: space-between; /* Izquierda/derecha */
-  align-items: flex-start; /* Alinea al top para mejor flujo */
-  margin-bottom: 6px;
-  font-size: 0.8em; /* Pequeño para compacto */
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+  font-size: 0.85em;
   color: #666;
-  gap: 8px;
+  gap: 0.5rem;
 }
 
 .detail-left,
 .detail-right {
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 0.4rem;
   flex: 1;
-  min-width: 0; /* Permite wrap si necesario */
+  min-width: 0;
+  text-align: left;
 }
 
 .detail-icon {
-  font-size: 0.9em;
+  font-size: 1em;
   flex-shrink: 0;
-}
-
-.room-card-description {
-  font-size: 0.85em;
-  color: #555;
-  margin: 6px 0;
-  line-height: 1.3; /* Compacto */
-}
-
-.room-card-price {
-  font-weight: bold;
-  color: #d32f2f;
-  font-size: 0.95em;
-  margin: 4px 0;
-}
-
-.room-status {
-  display: inline-block;
-  padding: 3px 6px;
-  border-radius: 10px;
-  font-size: 0.75em;
-  font-weight: bold;
-  margin: 4px 0;
-}
-
-.room-status.available {
-  background: #e8f5e8;
-  color: #2e7d32;
-}
-
-.room-status.occupied {
-  background: #ffebee;
-  color: #c62828;
 }
 
 .room-buttons {
   display: flex;
-  justify-content: space-between; /* Izquierda/derecha */
-  margin-top: auto; /* Al final */
-  padding-top: 8px;
+  justify-content: space-between;
+  margin-top: auto;
+  padding-top: 0.75rem;
   border-top: 1px solid #eee;
-  gap: 8px;
+  gap: 0.5rem;
 }
 
 .btn-more-info,
 .btn-select-tariff {
-  padding: 6px 10px; /* Compacto */
+  padding: 0.75rem 1rem;
   border: none;
-  border-radius: 4px;
+  border-radius: 6px;
   cursor: pointer;
   font-size: 0.85em;
   flex: 1;
   text-align: center;
+  font-weight: 600;
+  transition: all 0.2s ease;
 }
 
 .btn-more-info {
   background: #f5f5f5;
-  color: #333;
+  color: #666;
+  border: 1px solid #ddd;
+}
+
+.btn-more-info:hover {
+  background: #e9e9e9;
 }
 
 .btn-select-tariff {
-  background: #d32f2f;
+  background: linear-gradient(135deg, #d32f2f, #b71c1c);
   color: white;
-  font-weight: 500;
 }
 
-/* Responsive: En móvil, detalles en columna */
+.btn-select-tariff:hover {
+  background: linear-gradient(135deg, #b71c1c, #d32f2f);
+  transform: translateY(-1px);
+}
+
+/* Responsive para móvil */
 @media (max-width: 480px) {
   .room-details-row {
     flex-direction: column;
-    gap: 4px;
+    align-items: flex-start;
+    gap: 0.25rem;
+    text-align: left;
   }
 
   .room-buttons {
@@ -169,100 +138,85 @@
 
   .btn-more-info,
   .btn-select-tariff {
-    margin: 4px 0;
+    margin: 0.25rem 0;
   }
 
-  .room-card-title-wrapper {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 4px;
-  }
-
-  .featured-badge-small {
-    margin-left: 0;
-    align-self: flex-end;
+  .room-image-header {
+    height: 180px; /* Ajuste en móvil */
   }
 }
 
-/* Estilos existentes del RoomCard (mantener)... */
+/* Modal - Popup parecido a la imagen: carusel grande arriba (gran dimensión con cover), detalles en columnas equitativas abajo */
 .modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.6);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 1000;
+  backdrop-filter: blur(4px);
 }
 
 .modal-content {
   background: white;
-  border-radius: 8px;
-  max-width: 90vw;
-  max-height: 90vh;
+  border-radius: 16px;
+  max-width: 95vw;
+  max-height: 95vh;
   overflow-y: auto;
   position: relative;
-  width: 900px; /* Más ancho para sidebar */
+  width: 900px; /* Ancho para columnas equitativas */
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  animation: modalSlideIn 0.3s ease-out;
+  display: flex;
+  flex-direction: column;
+}
+
+@keyframes modalSlideIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
 }
 
 .modal-close {
   position: absolute;
-  top: 10px;
-  right: 15px;
-  background: none;
+  top: 15px;
+  right: 20px;
+  background: rgba(0, 0, 0, 0.1);
   border: none;
-  font-size: 24px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  font-size: 20px;
   cursor: pointer;
   color: #666;
   z-index: 1001;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
 }
 
 .modal-close:hover {
-  color: #d32f2f;
-}
-
-.modal-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px 20px;
-  border-bottom: 1px solid #eee;
-  background: #f9f9f9;
-}
-
-.hotel-logo {
-  display: flex;
-  flex-direction: column;
-  font-weight: bold;
-  color: #d32f2f;
-}
-
-.logo-text {
-  font-size: 1.2em;
-}
-
-.logo-sub {
-  font-size: 0.9em;
-  opacity: 0.8;
-}
-
-.header-btn {
-  padding: 8px 16px;
   background: #d32f2f;
   color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-weight: 500;
 }
 
 .modal-carousel {
   position: relative;
   width: 100%;
-  height: 300px;
+  height: 70vh; /* Gran dimensión para que se note más */
+  min-height: 500px; /* Mínimo fijo para pantallas pequeñas */
+  overflow: hidden;
+  background: #f0f0f0;
 }
 
 .carousel-prev,
@@ -270,27 +224,34 @@
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.6);
   color: white;
   border: none;
   font-size: 24px;
   cursor: pointer;
-  padding: 10px;
+  padding: 12px 16px;
   z-index: 10;
   border-radius: 50%;
+  transition: all 0.2s ease;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .carousel-prev {
-  left: 10px;
+  left: 15px;
 }
 
 .carousel-next {
-  right: 10px;
+  right: 15px;
 }
 
 .carousel-prev:hover,
 .carousel-next:hover {
-  background: rgba(0, 0, 0, 0.7);
+  background: rgba(0, 0, 0, 0.8);
+  transform: translateY(-50%) scale(1.1);
 }
 
 .carousel-image {
@@ -299,148 +260,167 @@
   left: 0;
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: cover; /* Cover para ver la imagen completa manteniendo proporción y cubriendo todo el área */
   opacity: 0;
-  transition: opacity 0.3s;
+  transition: opacity 0.4s ease;
 }
 
 .carousel-image.active {
   opacity: 1;
 }
 
-.modal-main-content {
-  display: grid;
-  grid-template-columns: 1fr 300px; /* Izq: descripción | Der: amenidades */
-  gap: 20px;
-  padding: 20px;
-}
-
-.modal-room-card-title {
-  font-size: 1.5em;
+.modal-room-title {
+  margin: 1.5rem 2rem 1rem 2rem;
+  font-size: 1.6em;
   color: #333;
-  margin-bottom: 10px;
-  grid-column: 1 / -1;
+  font-weight: 700;
+  text-align: center;
+  line-height: 1.3;
 }
 
-.modal-room-card-description {
-  font-size: 1em;
-  line-height: 1.6;
+.modal-description {
+  font-size: 1.05em;
+  line-height: 1.7;
   color: #555;
-  margin-bottom: 15px;
+  margin: 0 2rem 1.5rem 2rem;
+  text-align: justify;
+  white-space: pre-wrap;
 }
 
-.modal-room-card-price {
+.modal-price-status {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0 2rem 1.5rem 2rem;
+  padding: 1rem;
+  background: #f9f9f9;
+  border-radius: 8px;
+}
+
+.modal-price {
   font-weight: bold;
   color: #d32f2f;
-  font-size: 1.2em;
-  margin: 10px 0;
+  font-size: 1.3em;
 }
 
-.modal-room-status {
-  display: inline-block;
-  padding: 6px 12px;
-  border-radius: 20px;
+.modal-status {
+  padding: 0.75rem 1.5rem;
+  border-radius: 25px;
   font-size: 1em;
   font-weight: bold;
-  margin: 5px 0;
 }
 
-.modal-room-status.available {
+.modal-status.available {
   background: #e8f5e8;
   color: #2e7d32;
 }
 
-.modal-room-status.occupied {
+.modal-status.occupied {
   background: #ffebee;
   color: #c62828;
 }
 
-.modal-amenities-section {
+.modal-details-columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  margin: 0 2rem 1.5rem 2rem;
+  padding: 1rem;
   background: #f9f9f9;
-  padding: 15px;
-  border-radius: 6px;
+  border-radius: 8px;
 }
 
-.modal-amenities-section h4 {
-  margin-top: 0;
+.modal-column-left,
+.modal-column-right {
+  display: flex;
+  flex-direction: column;
+}
+
+.column-title {
+  margin: 0 0 1rem 0;
   color: #333;
   font-size: 1.1em;
+  font-weight: 600;
+  text-align: center;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 0.5rem;
 }
 
-.amenities-list {
+.column-list {
   list-style: none;
   padding: 0;
   margin: 0;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 0.75rem;
 }
 
-.amenity-item {
+.detail-item {
   display: flex;
   align-items: center;
-  gap: 8px;
-  font-size: 0.9em;
+  gap: 0.75rem;
+  font-size: 0.95em;
   color: #666;
+  padding: 0.5rem;
+  background: white;
+  border-radius: 6px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  transition: all 0.2s ease;
 }
 
-.amenity-item input[type="checkbox"] {
-  width: 16px;
-  height: 16px;
-  accent-color: #d32f2f; /* Rojo para checkboxes */
+.detail-item:hover {
+  background: #f5f5f5;
+  transform: translateX(4px);
 }
 
-.amenity-icon {
-  font-size: 1.1em;
-  width: 20px;
-  text-align: center;
+.detail-icon {
+  font-size: 1.2em;
+  flex-shrink: 0;
+}
+
+.detail-label {
+  flex: 1;
 }
 
 .modal-booking-section {
-  margin-top: 20px;
-  grid-column: 1 / -1;
-  display: flex;
-  gap: 10px;
-}
-
-.btn-available {
-  flex: 1;
-  padding: 12px;
-  background: #e8f5e8;
-  color: #2e7d32;
-  border: 1px solid #4caf50;
-  border-radius: 6px;
-  font-weight: bold;
-  cursor: default; /* No clickable */
+  margin: 1.5rem 2rem;
+  padding: 1.5rem;
+  background: #f0f0f0;
+  border-radius: 8px;
+  text-align: center;
 }
 
 .btn-select-tariff {
-  flex: 1;
-  padding: 12px;
-  background: #d32f2f;
+  width: 100%;
+  padding: 1.25rem;
+  background: linear-gradient(135deg, #d32f2f, #b71c1c);
   color: white;
   border: none;
-  border-radius: 6px;
+  border-radius: 8px;
   font-size: 1.1em;
   font-weight: bold;
   cursor: pointer;
-  transition: background 0.3s;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(211, 47, 47, 0.3);
 }
 
 .btn-select-tariff:hover:not(:disabled) {
-  background: #b71c1c;
+  background: linear-gradient(135deg, #b71c1c, #d32f2f);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(211, 47, 47, 0.4);
 }
 
 .btn-select-tariff:disabled {
   background: #ccc;
   cursor: not-allowed;
+  box-shadow: none;
 }
 
 .modal-room-thumbnails {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 15px;
+  gap: 1.5rem;
+  padding: 1.5rem 2rem;
   background: #f9f9f9;
   border-top: 1px solid #eee;
 }
@@ -448,57 +428,89 @@
 .thumbnails-indicator {
   background: rgba(0, 0, 0, 0.7);
   color: white;
-  padding: 4px 8px;
-  border-radius: 4px;
-  font-size: 0.8em;
+  padding: 0.75rem 1rem;
+  border-radius: 20px;
+  font-size: 1em;
   font-weight: bold;
-  min-width: 40px;
-  text-align: center;
+  flex-shrink: 0;
 }
 
 .thumbnails-container {
   display: flex;
-  gap: 5px;
+  gap: 1rem;
   flex: 1;
   overflow-x: auto;
-  padding: 5px 0;
+  padding: 0.75rem 0;
+  scrollbar-width: thin;
+  scrollbar-color: #d32f2f #f0f0f0;
+}
+
+.thumbnails-container::-webkit-scrollbar {
+  height: 6px;
+}
+
+.thumbnails-container::-webkit-scrollbar-track {
+  background: #f0f0f0;
+}
+
+.thumbnails-container::-webkit-scrollbar-thumb {
+  background: #d32f2f;
+  border-radius: 3px;
 }
 
 .thumbnail-image {
-  width: 80px;
-  height: 60px;
+  width: 100px;
+  height: 75px;
   object-fit: cover;
-  border-radius: 4px;
+  border-radius: 8px;
   flex-shrink: 0;
   cursor: pointer;
-  transition: border 0.3s;
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+  opacity: 0.7;
 }
 
+.thumbnail-image.active,
 .thumbnail-image:hover {
   border: 2px solid #d32f2f;
+  opacity: 1;
+  transform: scale(1.05);
 }
 
+/* Responsive para modal en móvil */
 @media (max-width: 768px) {
-  .modal-main-content {
+  .modal-content {
+    width: 95vw;
+    max-height: 95vh;
+  }
+
+  .modal-carousel {
+    height: 50vh;
+    min-height: 300px;
+  }
+
+  .modal-details-columns {
     grid-template-columns: 1fr;
-    gap: 15px;
+    gap: 1rem;
+    margin: 0 1rem 1rem 1rem;
+  }
+
+  .modal-room-info {
+    padding: 1rem;
   }
 
   .modal-booking-section {
-    flex-direction: column;
+    margin: 1rem;
   }
 
   .modal-room-thumbnails {
     flex-direction: column;
     align-items: flex-start;
+    gap: 1rem;
+    padding: 1rem;
   }
 
   .thumbnails-container {
-    margin-top: 10px;
-  }
-
-  .modal-content {
-    width: 95vw;
-    max-height: 95vh;
+    justify-content: center;
   }
 }

@@ -1,12 +1,12 @@
-/* RoomDetails.css - Adaptado del modal para vista completa */
+/* PropertyDetails.css - Adaptado del modal para vista completa */
 
-.room-details-section {
+.property-details-section {
   min-height: 100vh;
   background-color: #f8f9fa;
   padding: 2rem 0;
 }
 
-.room-details-container {
+.property-details-container {
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 1rem;
@@ -140,7 +140,7 @@
   margin-bottom: 2rem;
 }
 
-.room-title {
+.property-title {
   margin: 0 0 1rem 0;
   font-size: 2em;
   color: #333;
@@ -159,7 +159,7 @@
   font-weight: bold;
 }
 
-.room-meta {
+.property-meta {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 1rem;
@@ -181,7 +181,7 @@
   font-size: 1.2em;
 }
 
-.room-description {
+.property-description {
   font-size: 1.1em;
   line-height: 1.7;
   color: #555;
@@ -198,26 +198,38 @@
   margin-bottom: 2rem;
 }
 
-.room-price {
+.property-price {
   font-weight: bold;
   color: #d32f2f;
   font-size: 1.5em;
 }
 
-.room-status {
+.property-status {
   padding: 8px 16px;
   border-radius: 20px;
   font-weight: bold;
 }
 
-.room-status.available {
+.property-status.available {
   background: #e8f5e8;
   color: #2e7d32;
 }
 
-.room-status.occupied {
+.property-status.occupied {
   background: #ffebee;
   color: #c62828;
+}
+
+.contact-info {
+  background: #f9f9f9;
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin-bottom: 2rem;
+}
+
+.contact-info h3 {
+  margin-top: 0;
+  color: #333;
 }
 
 /* Amenidades */
@@ -237,45 +249,26 @@
 
 .amenities-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1.5rem;
+  grid-template-columns: 1fr;
+  gap: 0.75rem;
   margin-top: 1rem;
 }
 
-.amenities-column {
-  display: flex;
-  flex-direction: column;
-}
-
-.column-title {
-  margin: 0 0 0.75rem 0;
-  color: #333;
-  font-size: 1.1em;
-  font-weight: 600;
-}
-
-.column-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.detail-item {
+.amenity-item {
   display: flex;
   align-items: center;
   gap: 10px;
-  font-size: 0.95em;
-  color: #666;
-  padding: 0.25rem 0;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #f0f0f0;
 }
 
-.detail-icon {
-  font-size: 1.2em;
-  width: 20px;
-  text-align: center;
+.amenity-check {
+  color: #2e7d32;
+  font-weight: bold;
+}
+
+.amenity-label {
+  color: #666;
 }
 
 /* Thumbnails */
@@ -339,13 +332,8 @@
   transition: background 0.3s;
 }
 
-.btn-select-tariff:hover:not(:disabled) {
+.btn-select-tariff:hover {
   background: #b71c1c;
-}
-
-.btn-select-tariff:disabled {
-  background: #ccc;
-  cursor: not-allowed;
 }
 
 /* Responsive */
@@ -358,11 +346,7 @@
     height: 300px;
   }
 
-  .room-meta {
-    grid-template-columns: 1fr;
-  }
-
-  .amenities-grid {
+  .property-meta {
     grid-template-columns: 1fr;
   }
 

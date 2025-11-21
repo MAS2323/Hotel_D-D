@@ -79,7 +79,7 @@ const Header = () => {
                 Contacto
               </Link>
             </li>
-            <li>
+            {/* <li>
               <Link
                 to="/restaurant"
                 className={`header-link ${isActive("/restaurant")}`}
@@ -87,7 +87,7 @@ const Header = () => {
               >
                 Restaurante
               </Link>
-            </li>
+            </li> */}
             <li>
               <Link
                 to="/services"
