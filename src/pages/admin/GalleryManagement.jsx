@@ -1,4 +1,4 @@
-// src/components/admin/GalleryManagement.jsx (actualizado: botones siempre visibles, sin transición de hover)
+// src/components/admin/GalleryManagement.jsx (actualizado: estructura de cards sin overlay, botones siempre visibles en la parte inferior)
 import React, { useEffect, useState } from "react";
 import { galleryAPI, heroAPI } from "../../services/api";
 import "./GalleryManagement.css";
@@ -211,12 +211,8 @@ export default function GalleryManagement() {
               alt={image.alt}
               className="gallery-image-admin"
             />
-            {/* Overlay siempre visible con acciones pegadas */}
-            <div className="gallery-overlay">
-              <div className="overlay-content">
-                <h4 className="gallery-alt">{image.alt}</h4>
-                <p className="gallery-desc">{image.desc}</p>
-              </div>
+            <div className="gallery-content">
+              <h4 className="gallery-alt">{image.alt}</h4>
               <div className="gallery-actions">
                 <button
                   onClick={() => handleEdit(image)}

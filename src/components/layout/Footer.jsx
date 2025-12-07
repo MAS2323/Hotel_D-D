@@ -1,4 +1,3 @@
-// src/components/layout/Footer.js
 import { useState } from "react";
 import "./Footer.css";
 
@@ -16,6 +15,8 @@ const Footer = () => {
       setCheckOut("");
     }
   };
+
+  const currentYear = new Date().getFullYear(); // Año automático
 
   return (
     <footer className="footer">
@@ -167,7 +168,7 @@ const Footer = () => {
       <div className="footer-bottom">
         <div className="footer-container">
           <p className="footer-copyright">
-            &copy; 2025 Hotel D&D. Todos los derechos reservados.
+            &copy; {currentYear} Hotel D&D. Todos los derechos reservados.
           </p>
           <ul className="footer-legal-links">
             <li>
@@ -177,6 +178,17 @@ const Footer = () => {
               <a href="/privacy">Política de Privacidad</a>
             </li>
           </ul>
+          {/* Nueva línea: Powered by */}
+          <p className="footer-powered-by">
+            Powered by{" "}
+            <a
+              href="https://www.instagram.com/tecnologias_mas?igsh=MWh2c3h2ZTZsN2s5cg%3D%3D&utm_source=qr"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Tecnologías Más
+            </a>
+          </p>
         </div>
       </div>
     </footer>

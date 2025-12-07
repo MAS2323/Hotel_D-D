@@ -117,7 +117,7 @@ const Header = () => {
             ) : (
               <li>
                 <Link
-                  to="/admin/login"
+                  to="/admin/login-dd-hotel"
                   className="header-admin-btn"
                   onClick={closeMenu}
                 >

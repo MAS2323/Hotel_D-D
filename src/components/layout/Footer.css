@@ -1,8 +1,12 @@
-/* src/components/layout/Footer.css (Actualizado para SVGs) */
+/* src/components/layout/Footer.css */
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,600;0,700;1,400&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap");
+
 .footer {
   background-color: #701705;
   color: white;
   margin-top: auto;
+  font-family: "Open Sans", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif; /* Base sans-serif */
 }
 
 .footer-top {
@@ -37,8 +41,10 @@
 .footer-logo {
   font-size: 1.5rem;
   font-weight: bold;
+  font-family: "Playfair Display", Georgia, serif; /* Elegante para logo */
   margin-bottom: 1rem;
   color: white;
+  letter-spacing: 0.5px;
 }
 
 .footer-description {
@@ -46,6 +52,7 @@
   line-height: 1.5;
   margin-bottom: 1.5rem;
   color: white;
+  font-family: "Open Sans", sans-serif; /* Legible para párrafos */
 }
 
 .footer-social-icons {
@@ -82,6 +89,7 @@
 .footer-column-title {
   font-size: 1.1rem;
   font-weight: bold;
+  font-family: "Playfair Display", Georgia, serif; /* Títulos en serif para lujo */
   margin-bottom: 1rem;
   color: white;
 }
@@ -100,6 +108,7 @@
   text-decoration: none;
   font-size: 0.9rem;
   transition: color 0.3s;
+  font-family: "Open Sans", sans-serif;
 }
 
 .footer-links a:hover {
@@ -110,6 +119,7 @@
   font-size: 0.9rem;
   margin-bottom: 1rem;
   line-height: 1.4;
+  font-family: "Open Sans", sans-serif;
 }
 
 .footer-contact-item a {
@@ -125,6 +135,7 @@
   font-size: 0.9rem;
   margin-bottom: 1rem;
   color: white;
+  font-family: "Open Sans", sans-serif;
 }
 
 .footer-reserve-form {
@@ -140,10 +151,12 @@
   background-color: rgba(255, 255, 255, 0.1);
   color: white;
   font-size: 0.9rem;
+  font-family: "Open Sans", sans-serif;
 }
 
 .footer-reserve-input::placeholder {
   color: rgba(255, 255, 255, 0.7);
+  font-family: "Open Sans", sans-serif;
 }
 
 .footer-reserve-input:focus {
@@ -160,6 +173,8 @@
   font-weight: bold;
   cursor: pointer;
   transition: background-color 0.3s;
+  font-family: "Open Sans", sans-serif;
+  font-weight: 600;
 }
 
 .footer-reserve-btn:hover {
@@ -177,6 +192,7 @@
   margin: 0;
   font-size: 0.8rem;
   color: white;
+  font-family: "Open Sans", sans-serif;
 }
 
 .footer-legal-links {
@@ -197,6 +213,7 @@
   text-decoration: none;
   font-size: 0.8rem;
   transition: color 0.3s;
+  font-family: "Open Sans", sans-serif;
 }
 
 .footer-legal-links a:hover {
@@ -214,6 +231,11 @@
   }
 
   .footer-reserve-input {
-    font-size: 1rem; /* Mejora legibilidad en móvil */
+    font-size: 1rem;
+  }
+
+  .footer-logo,
+  .footer-column-title {
+    font-size: 1.25rem; /* Ajuste para mobile */
   }
 }

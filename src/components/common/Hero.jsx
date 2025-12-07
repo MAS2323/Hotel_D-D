@@ -104,8 +104,12 @@ const Hero = () => {
         <div className="hero-content">
           {/* Título hotel y ubicación */}
           <div className="hotel-info">
-            <h1 className="hero-subtitle-large">Hotel D&D</h1>
-            <p className="hero-subtitle">Bienvenidos al Hotel D&D</p>
+            <h1 className="text-4xl font-display font-bold">
+              Bienvenidos al Hotel D&D
+            </h1>
+            <p className="text-lg leading-relaxed">
+              Descubre aventuras en cada habitación...
+            </p>
             <p className="hotel-location">
               Malabo, Bioko Norte, Guinea Ecuatorial
             </p>

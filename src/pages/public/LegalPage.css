@@ -1,0 +1,61 @@
+/* src/pages/public/LegalPage.css - Estilos para páginas legales */
+.legal-page {
+  min-height: 100vh;
+  padding: 4rem 0;
+  background-color: #f8f9fa;
+  font-family: "Open Sans", sans-serif;
+}
+
+.legal-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.legal-title {
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: 2.5rem;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 2rem;
+  color: #2d1b69; /* Púrpura D&D */
+}
+
+.legal-section {
+  margin-bottom: 2rem;
+  line-height: 1.6;
+}
+
+.legal-section h2 {
+  font-family: "Playfair Display", serif;
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  color: #180501;
+  border-bottom: 2px solid #701705;
+  padding-bottom: 0.5rem;
+}
+
+.legal-section p,
+.legal-section ul {
+  color: #333;
+  margin-bottom: 1rem;
+}
+
+.legal-section ul {
+  padding-left: 1.5rem;
+}
+
+.legal-section li {
+  margin-bottom: 0.5rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .legal-title {
+    font-size: 2rem;
+  }
+
+  .legal-section h2 {
+    font-size: 1.25rem;
+  }
+}

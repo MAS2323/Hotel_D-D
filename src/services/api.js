@@ -1,6 +1,5 @@
 // src/services/api.js (actualizado: cambia restaurantAPI.createMenu y updateMenu para aceptar objeto menuData + file opcional, con validaciones para required fields en create, y parseFloat para price)
-const BASE_URL =
-  import.meta.env.VITE_API_URL || "https://backend-hotel-dd.onrender.com";
+const BASE_URL = import.meta.env.VITE_API_URL || "http://127.0.0.1:8000";
 
 // ---------- HELPERS ----------
 const getAuthHeaders = () => {

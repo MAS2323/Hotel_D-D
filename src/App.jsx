@@ -21,6 +21,8 @@ import MenuView from "./components/sections/MenuView";
 import SubmitTestimonial from "./pages/public/SubmitTestimonial";
 import PropertyDetails from "./components/ui/PropertyDetails";
 import UserLogin from "./pages/public/UserLogin";
+import Terms from "./pages/public/Terms";
+import Privacy from "./pages/public/Privacy";
 
 function App() {
   return (
@@ -44,11 +46,13 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/submit-testimonial" element={<SubmitTestimonial />} />
           <Route path="/login" element={<UserLogin />} />
-          <Route path="/admin/login" element={<Login />} />
+          <Route path="/admin/login-dd-hotel" element={<Login />} />
           <Route path="/admin/*" element={<AdminDashboard />} />
           <Route path="/menu" element={<MenuView />} />
           <Route path="/full-gallery/" element={<FullGallery />} />
           <Route path="/apartments/:id" element={<PropertyDetails />} />
+          <Route path="/terms" element={<Terms />} /> {/* Nueva */}
+          <Route path="/privacy" element={<Privacy />} /> {/* Nueva */}
           {/* Add admin routes if needed */}
         </Routes>
       </Layout>
