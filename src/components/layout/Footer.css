@@ -1,6 +1,20 @@
 /* src/components/layout/Footer.css */
 @import url("https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,600;0,700;1,400&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap");
 
+.logo-image {
+  width: 160px; /* Tamaño aumentado para footer */
+  height: auto;
+  display: block;
+  object-fit: contain; /* Mantiene proporciones */
+}
+
+.footer-logo {
+  margin-bottom: 1rem; /* Espacio debajo del logo en footer */
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
 .footer {
   background-color: #701705;
   color: white;
@@ -36,15 +50,10 @@
     grid-template-columns: 1fr;
     gap: 1.5rem;
   }
-}
 
-.footer-logo {
-  font-size: 1.5rem;
-  font-weight: bold;
-  font-family: "Playfair Display", Georgia, serif; /* Elegante para logo */
-  margin-bottom: 1rem;
-  color: white;
-  letter-spacing: 0.5px;
+  .logo-image {
+    width: 140px; /* Tamaño ajustado para mobile, aún más grande que antes */
+  }
 }
 
 .footer-description {
@@ -234,7 +243,6 @@
     font-size: 1rem;
   }
 
-  .footer-logo,
   .footer-column-title {
     font-size: 1.25rem; /* Ajuste para mobile */
   }

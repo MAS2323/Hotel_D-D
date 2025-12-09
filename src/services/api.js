@@ -1,5 +1,5 @@
-// src/services/api.js (actualizado: cambia restaurantAPI.createMenu y updateMenu para aceptar objeto menuData + file opcional, con validaciones para required fields en create, y parseFloat para price)
-const BASE_URL = import.meta.env.VITE_API_URL || "http://127.0.0.1:8000";
+// src/services/api.js (actualizado: agrega getGallery a statsAPI para contar imágenes de galería y hero)
+const BASE_URL = import.meta.env.VITE_API_URL || "hotelddguineaecuatorial.com";
 
 // ---------- HELPERS ----------
 const getAuthHeaders = () => {
@@ -368,6 +368,27 @@ export const statsAPI = {
   getBookings: async () => getData("/admin/stats/bookings"),
   getServices: async () => getData("/admin/stats/services"),
   getMenuItems: async () => getData("/admin/stats/menu"),
+  getGallery: async () => {
+    try {
+      const [galleryData, heroData] = await Promise.all([
+        galleryAPI.getAll(0, 100, "galeria"),
+        heroAPI.getAll(0, 100, "hero"),
+      ]);
+      const galleryList = Array.isArray(galleryData)
+        ? galleryData
+        : galleryData.images || galleryData || [];
+      const heroList = Array.isArray(heroData)
+        ? heroData
+        : heroData.images || heroData || [];
+      const total =
+        (Array.isArray(galleryList) ? galleryList.length : 0) +
+        (Array.isArray(heroList) ? heroList.length : 0);
+      return { total };
+    } catch (err) {
+      console.error("Error fetching gallery stats:", err);
+      return { total: 0 };
+    }
+  },
 };
 
 // ✅ Nueva API para apartments (similar a roomsAPI, con soporte para FormData e imágenes)

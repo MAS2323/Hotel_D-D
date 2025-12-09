@@ -1,21 +1,8 @@
-import { useState } from "react";
+// src/components/layout/Footer.js
+import logo from "../../assets/img/d&d_logo.png"; // Ajusta la ruta si es necesario
 import "./Footer.css";
 
 const Footer = () => {
-  const [checkIn, setCheckIn] = useState("");
-  const [checkOut, setCheckOut] = useState("");
-
-  const handleQuickReserve = (e) => {
-    e.preventDefault();
-    if (checkIn && checkOut) {
-      alert(
-        `¡Reserva rápida confirmada! Check-in: ${checkIn}, Check-out: ${checkOut}. Te contactaremos pronto para detalles de tu aventura.`
-      );
-      setCheckIn("");
-      setCheckOut("");
-    }
-  };
-
   const currentYear = new Date().getFullYear(); // Año automático
 
   return (
@@ -23,11 +10,13 @@ const Footer = () => {
       <div className="footer-top">
         <div className="footer-container">
           <div className="footer-column">
-            <div className="footer-logo">🏰 Hotel D&D</div>
+            <div className="footer-logo">
+              <img src={logo} alt="Hotel D&D" className="logo-image" />
+            </div>
             <p className="footer-description">
-              Donde cada estancia es una aventura épica en el mundo de Dungeons
-              & Dragons. Ubicados en el corazón de Malabo, ofrecemos magia y
-              comodidad para viajeros de todos los reinos.
+              Donde cada estancia es una aventura épica en el mundo de D&D.
+              Ubicados en el corazón de Malabo, ofrecemos magia y comodidad para
+              viajeros de todos los lugares.
             </p>
             <div className="footer-social-icons">
               <a
@@ -135,33 +124,6 @@ const Footer = () => {
               <br />
               Malabo, Guinea Ecuatorial
             </p>
-          </div>
-          <div className="footer-column">
-            <h3 className="footer-column-title">Reserva Rápida</h3>
-            <p className="footer-reserve-desc">
-              Inicia tu reserva de aventura en segundos.
-            </p>
-            <form onSubmit={handleQuickReserve} className="footer-reserve-form">
-              <input
-                type="date"
-                placeholder="Check-in"
-                value={checkIn}
-                onChange={(e) => setCheckIn(e.target.value)}
-                required
-                className="footer-reserve-input"
-              />
-              <input
-                type="date"
-                placeholder="Check-out"
-                value={checkOut}
-                onChange={(e) => setCheckOut(e.target.value)}
-                required
-                className="footer-reserve-input"
-              />
-              <button type="submit" className="footer-reserve-btn">
-                Reservar
-              </button>
-            </form>
           </div>
         </div>
       </div>

@@ -22,6 +22,7 @@ const DashboardHome = () => {
     bookings: 0,
     services: 0,
     menu: 0,
+    gallery: 0, // ← NUEVO: contador de imágenes en galería
   });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -39,13 +40,15 @@ const DashboardHome = () => {
           bookingsRes,
           servicesRes,
           menuRes,
+          galleryRes, // ← NUEVO: fetch count de imágenes
         ] = await Promise.all([
           statsAPI.getUsers(),
           statsAPI.getRooms(),
           statsAPI.getApartments(),
           statsAPI.getBookings(),
           statsAPI.getServices(),
-          statsAPI.getMenuItems(), // ← NUEVO: fetch count de ítems del menú
+          statsAPI.getMenuItems(),
+          statsAPI.getGallery(), // ← NUEVO: asumiendo endpoint que retorna {total: number}
         ]);
         // Ajusta a 'total' en lugar de 'count', basado en el error (objeto con key {total})
         setStats({
@@ -54,7 +57,8 @@ const DashboardHome = () => {
           apartments: Number(apartmentsRes.total) || 0,
           bookings: Number(bookingsRes.total) || 0,
           services: Number(servicesRes.total) || 0,
-          menu: Number(menuRes.total) || 0, // ← NUEVO
+          menu: Number(menuRes.total) || 0,
+          gallery: Number(galleryRes.total) || 0, // ← NUEVO
         });
       } catch (err) {
         console.error("Error fetching stats:", err);
@@ -78,7 +82,8 @@ const DashboardHome = () => {
       Apartamentos: "/admin/departments",
       Reservas: "/admin/bookings",
       Servicios: "/admin/services",
-      Menú: "/admin/menu", // ← NUEVO
+      Menú: "/admin/menu",
+      Galería: "/admin/gallery", // ← NUEVO
     };
     navigate(routeMap[type]);
   };
@@ -133,6 +138,13 @@ const DashboardHome = () => {
           label="Menú"
           color="orange"
           onMoreInfo={() => handleMoreInfo("Menú")}
+        />
+        <StatCard
+          icon="🖼️"
+          number={stats.gallery}
+          label="Galería"
+          color="pink" // ← NUEVO: color para galería (ajusta si tienes CSS para 'pink')
+          onMoreInfo={() => handleMoreInfo("Galería")}
         />
       </div>
     </div>

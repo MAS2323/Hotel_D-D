@@ -105,7 +105,30 @@
   margin: 3px 0;
   transition: 0.3s;
 }
+/* src/components/layout/Header.css - Agrega o actualiza estas reglas para ajustar el logo */
+.header-logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  /* Otras propiedades existentes... */
+}
 
+.logo-image {
+  width: 80px; /* Tamaño reducido para que no sobresalga */
+  height: auto;
+  max-height: 50px; /* Limita la altura máxima para consistencia */
+  display: block;
+  object-fit: contain; /* Mantiene proporciones sin distorsión */
+}
+
+/* Responsive: Aún más pequeño en móviles si es necesario */
+@media (max-width: 768px) {
+  .logo-image {
+    width: 60px;
+    max-height: 40px;
+  }
+}
 /* Mobile Styles */
 @media (max-width: 768px) {
   .header-logo {

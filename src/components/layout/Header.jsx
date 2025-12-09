@@ -2,6 +2,7 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
 import { useState } from "react";
+import logo from "../../assets/img/d&d_logo.png"; // Ajusta la ruta si es necesario
 import "./Header.css";
 
 const Header = () => {
@@ -30,7 +31,7 @@ const Header = () => {
     <header className="header">
       <nav className="header-nav">
         <Link to="/" className="header-logo" onClick={closeMenu}>
-          🏰 Hotel D&D
+          <img src={logo} alt="Hotel D&D" className="logo-image" />
         </Link>
         <div className="header-right">
           <button
@@ -79,15 +80,6 @@ const Header = () => {
                 Contacto
               </Link>
             </li>
-            {/* <li>
-              <Link
-                to="/restaurant"
-                className={`header-link ${isActive("/restaurant")}`}
-                onClick={closeMenu}
-              >
-                Restaurante
-              </Link>
-            </li> */}
             <li>
               <Link
                 to="/services"
