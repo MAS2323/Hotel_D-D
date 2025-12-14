@@ -1,4 +1,3 @@
-/* src/components/layout/Header.css */
 @import url("https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,600;0,700;1,400&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap");
 
 .header {
@@ -9,55 +8,68 @@
   top: 0;
   z-index: 100;
   font-family: "Open Sans", -apple-system, BlinkMacSystemFont, "Segoe UI",
-    sans-serif; /* Base sans-serif para legibilidad */
+    sans-serif;
 }
 
 .header-nav {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 1rem;
+  padding: 0.8rem 1rem;
   display: flex;
   justify-content: center;
   align-items: center;
   position: relative;
 }
 
-.header-logo {
-  font-size: 1.5rem;
-  font-weight: bold;
-  font-family: "Playfair Display", Georgia, serif; /* Elegante para logo/título hotelero */
-  color: white;
-  text-decoration: none;
+/* Contenedor del logo en el menú */
+.header-logo-item {
   position: absolute;
-  left: 1rem;
-  letter-spacing: 0.5px; /* Toque premium */
-}
-
-.header-right {
+  left: 50%;
+  transform: translateX(-50%);
   display: flex;
   align-items: center;
-  margin-left: auto;
-  right: 1rem;
-  position: absolute;
+  justify-content: center;
+  z-index: 10;
 }
 
+.header-logo-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  padding: 0.5rem;
+}
+
+.logo-image {
+  width: 85px;
+  height: auto;
+  max-height: 55px;
+  display: block;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+}
+
+/* Menú centrado */
 .header-menu {
   display: flex;
   list-style: none;
-  gap: 1.5rem;
+  gap: 1.8rem;
   align-items: center;
   margin: 0;
   padding: 0;
+  justify-content: center;
 }
 
 .header-link {
   color: white;
   text-decoration: none;
-  padding: 0.5rem 1rem;
+  padding: 0.6rem 1rem;
   border-radius: 4px;
-  transition: background-color 0.3s;
-  font-family: "Open Sans", sans-serif; /* Sans-serif para menús, legible como en hoteles */
-  font-weight: 500;
+  transition: all 0.3s ease;
+  font-family: "Open Sans", sans-serif;
+  font-weight: 600;
+  white-space: nowrap;
+  letter-spacing: 0.5px;
 }
 
 .header-link:hover,
@@ -71,24 +83,26 @@
 .header-logout-btn {
   background-color: #180501;
   color: white;
-  border: 1px solid white;
-  padding: 0.5rem 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  padding: 0.6rem 1.2rem;
   border-radius: 4px;
   cursor: pointer;
   text-decoration: none;
-  transition: background-color 0.3s;
+  transition: all 0.3s ease;
   font-size: 0.9rem;
   font-family: "Open Sans", sans-serif;
   font-weight: 600;
+  white-space: nowrap;
 }
 
 .header-admin-btn:hover,
 .header-logout-btn:hover {
   background-color: white;
   color: #701705;
+  border-color: white;
 }
 
-/* Hamburger Menu */
+/* Hamburguer */
 .header-hamburger {
   display: none;
   flex-direction: column;
@@ -105,59 +119,58 @@
   margin: 3px 0;
   transition: 0.3s;
 }
-/* src/components/layout/Header.css - Agrega o actualiza estas reglas para ajustar el logo */
-.header-logo {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-decoration: none;
-  /* Otras propiedades existentes... */
-}
 
-.logo-image {
-  width: 80px; /* Tamaño reducido para que no sobresalga */
-  height: auto;
-  max-height: 50px; /* Limita la altura máxima para consistencia */
-  display: block;
-  object-fit: contain; /* Mantiene proporciones sin distorsión */
-}
-
-/* Responsive: Aún más pequeño en móviles si es necesario */
+/* Mobile Responsive - REEMPLAZA completamente tu bloque @media */
 @media (max-width: 768px) {
-  .logo-image {
-    width: 60px;
-    max-height: 40px;
+  .header-nav {
+    justify-content: space-between;
+    padding: 1rem;
   }
-}
-/* Mobile Styles */
-@media (max-width: 768px) {
-  .header-logo {
-    left: 0.5rem;
-    font-size: 1.25rem;
+
+  .header-logo-item {
+    position: static !important;
+    left: auto !important;
+    transform: none !important;
+    order: -1; /* Logo primero */
+    padding: 0.5rem 0;
+  }
+
+  .logo-image {
+    width: 70px;
+    max-height: 45px;
   }
 
   .header-right {
-    right: 0.5rem;
+    position: static;
   }
 
   .header-hamburger {
+    position: absolute;
+    right: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 1001;
     display: flex;
   }
 
   .header-menu {
-    position: absolute;
-    top: 100%;
-    right: 0;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
     background: linear-gradient(to bottom, #701705, #180501);
     flex-direction: column;
     gap: 0;
-    width: 250px;
-    box-shadow: -5px 0 10px rgba(112, 23, 5, 0.3);
+    padding: 5rem 0 2rem 0;
+    margin: 0;
+    box-shadow: none;
     transform: translateY(-100%);
     opacity: 0;
     visibility: hidden;
-    transition: transform 0.3s ease, opacity 0.3s ease, visibility 0.3s ease;
-    font-family: "Open Sans", sans-serif; /* Mantiene sans en mobile */
+    transition: all 0.4s ease;
+    z-index: 1000;
+    overflow-y: auto;
   }
 
   .header-menu-open {
@@ -168,6 +181,7 @@
 
   .header-menu li {
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    width: 100%;
   }
 
   .header-menu li:last-child {
@@ -176,15 +190,17 @@
 
   .header-link {
     display: block;
-    padding: 1rem;
+    padding: 1.2rem;
     width: 100%;
-    text-align: left;
+    text-align: center;
+    font-size: 1.1rem;
   }
 
   .header-admin-btn,
   .header-logout-btn {
-    width: 100%;
-    text-align: center;
-    margin: 0;
+    margin: 0.5rem 1rem;
+    padding: 1rem;
+    width: calc(100% - 2rem);
+    border-radius: 4px;
   }
 }
