@@ -113,14 +113,7 @@ const Header = () => {
               ) : null}
             </div>
             {isMenuOpen && (
-              <li
-                className="header-powered-by"
-                style={{
-                  marginTop: "auto",
-                  textAlign: "center",
-                  paddingTop: "20px",
-                }}
-              >
+              <li className="header-powered-by">
                 <p className="footer-powered-by">
                   Powered by{" "}
                   <a

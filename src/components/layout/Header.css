@@ -16,23 +16,12 @@
   margin: 0 auto;
   padding: 0.8rem 1rem;
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
   position: relative;
 }
 
-/* Contenedor del logo en el menú */
-.header-logo-item {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 10;
-}
-
-.header-logo-link {
+.header-logo {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -49,7 +38,12 @@
   filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
 }
 
-/* Menú centrado */
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
 .header-menu {
   display: flex;
   list-style: none;
@@ -57,7 +51,12 @@
   align-items: center;
   margin: 0;
   padding: 0;
-  justify-content: center;
+}
+
+.header-menu-items {
+  display: flex;
+  align-items: center;
+  gap: 1.8rem;
 }
 
 .header-link {
@@ -102,6 +101,20 @@
   border-color: white;
 }
 
+/* Powered by en mobile */
+.header-powered-by {
+  margin-top: auto;
+  text-align: center;
+  padding-top: 20px;
+  width: 100%;
+}
+
+.footer-powered-by {
+  margin: 0;
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.8);
+}
+
 /* Hamburguer */
 .header-hamburger {
   display: none;
@@ -120,19 +133,11 @@
   transition: 0.3s;
 }
 
-/* Mobile Responsive - REEMPLAZA completamente tu bloque @media */
+/* Mobile Responsive */
 @media (max-width: 768px) {
   .header-nav {
     justify-content: space-between;
     padding: 1rem;
-  }
-
-  .header-logo-item {
-    position: static !important;
-    left: auto !important;
-    transform: none !important;
-    order: -1; /* Logo primero */
-    padding: 0.5rem 0;
   }
 
   .logo-image {
@@ -141,7 +146,7 @@
   }
 
   .header-right {
-    position: static;
+    position: relative;
   }
 
   .header-hamburger {
@@ -162,7 +167,7 @@
     background: linear-gradient(to bottom, #701705, #180501);
     flex-direction: column;
     gap: 0;
-    padding: 5rem 0 2rem 0;
+    padding: 5rem 0 0 0;
     margin: 0;
     box-shadow: none;
     transform: translateY(-100%);
@@ -171,12 +176,20 @@
     transition: all 0.4s ease;
     z-index: 1000;
     overflow-y: auto;
+    justify-content: flex-start;
   }
 
   .header-menu-open {
     transform: translateY(0);
     opacity: 1;
     visibility: visible;
+  }
+
+  .header-menu-items {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 0;
   }
 
   .header-menu li {
@@ -202,5 +215,9 @@
     padding: 1rem;
     width: calc(100% - 2rem);
     border-radius: 4px;
+  }
+
+  .header-powered-by {
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
   }
 }
