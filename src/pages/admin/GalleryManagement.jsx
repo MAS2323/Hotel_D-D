@@ -1,4 +1,3 @@
-// src/components/admin/GalleryManagement.jsx (actualizado: estructura de cards sin overlay, botones siempre visibles en la parte inferior)
 import React, { useEffect, useState } from "react";
 import { galleryAPI, heroAPI } from "../../services/api";
 import "./GalleryManagement.css";
@@ -13,7 +12,6 @@ export default function GalleryManagement() {
   const [file, setFile] = useState(null);
   const [preview, setPreview] = useState(null);
 
-  // Determinar API actual basada en tab
   const currentAPI = activeTab === "galeria" ? galleryAPI : heroAPI;
 
   // GET imágenes por categoría activa
@@ -40,17 +38,45 @@ export default function GalleryManagement() {
       const objectUrl = URL.createObjectURL(file);
       setPreview(objectUrl);
       return () => URL.revokeObjectURL(objectUrl);
+    } else {
+      setPreview(null);
     }
   }, [file]);
 
   // Crear o actualizar
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // 🚨 VALIDACIÓN CRÍTICA: Verificar archivo antes de enviar
+    if (!file && !editing) {
+      alert("❌ Debes seleccionar una imagen para subir");
+      return;
+    }
+
+    if (file && !(file instanceof File)) {
+      console.error("❌ 'file' no es un objeto File válido:", file);
+      alert("Error: El archivo seleccionado no es válido");
+      return;
+    }
+
+    if (file && file.size === 0) {
+      alert("❌ El archivo está vacío (0 bytes)");
+      return;
+    }
+
     setOperationLoading(true);
+
     try {
+      // 🚨 LOG PARA DEBUG
+      console.log("=== ENVIANDO A API ===");
+      console.log("alt:", formData.alt);
+      console.log("desc:", formData.desc);
+      console.log("category:", activeTab);
+      console.log("file:", file?.name, `${file?.size} bytes`, file?.type);
+      console.log("editing:", editing || "Nuevo");
+
       let response;
       if (editing) {
-        // Para update, pasa la categoría actual del tab (mantiene en misma categoría)
         response = await currentAPI.update(
           editing,
           formData.alt,
@@ -60,7 +86,6 @@ export default function GalleryManagement() {
         );
         setImages(images.map((img) => (img.id === editing ? response : img)));
       } else {
-        // Para create, usa categoría del tab
         response = await currentAPI.create(
           formData.alt,
           formData.desc,
@@ -69,10 +94,12 @@ export default function GalleryManagement() {
         );
         setImages([...images, response]);
       }
+
+      console.log("✅ ÉXITO:", response);
       resetForm();
     } catch (err) {
-      console.error("Error al guardar imagen:", err);
-      alert("Error al guardar imagen");
+      console.error("❌ ERROR AL GUARDAR:", err);
+      alert(`Error al guardar imagen: ${err.message}`);
     } finally {
       setOperationLoading(false);
     }
@@ -85,25 +112,25 @@ export default function GalleryManagement() {
     try {
       await currentAPI.delete(id);
       setImages(images.filter((img) => img.id !== id));
+      console.log("✅ Imagen eliminada:", id);
     } catch (err) {
-      console.error("Error al eliminar imagen:", err);
+      console.error("❌ ERROR AL ELIMINAR:", err);
       alert("Error al eliminar imagen");
     } finally {
       setOperationLoading(false);
     }
   };
 
-  // Editar: Cambia tab si la imagen es de otra categoría
+  // Editar
   const handleEdit = (image) => {
     if (image.category !== activeTab) {
       setActiveTab(image.category);
-      // Re-render usará el nuevo currentAPI
-      return; // Espera al nuevo fetch antes de editar
+      return;
     }
     setEditing(image.id);
     setFormData({ alt: image.alt, desc: image.desc });
     setPreview(image.url);
-    setFile(null);
+    setFile(null); // Importante: no enviar archivo en edición a menos que se seleccione uno nuevo
   };
 
   // Reset
@@ -112,10 +139,13 @@ export default function GalleryManagement() {
     setFile(null);
     setPreview(null);
     setEditing(null);
+    // Resetear el input file
+    document.querySelector('input[type="file"]').value = "";
   };
 
-  if (loading)
+  if (loading) {
     return <div className="loading-spinner">Cargando {activeTab}…</div>;
+  }
 
   const getTitle = () =>
     activeTab === "galeria" ? "Gestión de Galería" : "Gestión de Hero";
@@ -123,7 +153,8 @@ export default function GalleryManagement() {
   return (
     <div className="gallery-management">
       <h2 className="gallery-title">{getTitle()}</h2>
-      {/* Tabs para categorías */}
+
+      {/* Tabs */}
       <div className="tabs">
         <button
           className={`tab-btn ${activeTab === "galeria" ? "active" : ""}`}
@@ -140,7 +171,8 @@ export default function GalleryManagement() {
           Hero
         </button>
       </div>
-      {/* Loader global para operaciones */}
+
+      {/* Loader global */}
       {operationLoading && (
         <div className="global-loader">
           <div className="circular-progress">
@@ -149,6 +181,7 @@ export default function GalleryManagement() {
           </div>
         </div>
       )}
+
       {/* Formulario */}
       <form onSubmit={handleSubmit} className="gallery-form">
         <h3 className="form-title">
@@ -175,7 +208,20 @@ export default function GalleryManagement() {
         <input
           type="file"
           accept="image/*"
-          onChange={(e) => setFile(e.target.files[0])}
+          onChange={(e) => {
+            const selectedFile = e.target.files[0];
+            if (selectedFile) {
+              console.log(
+                "✅ Archivo seleccionado:",
+                selectedFile.name,
+                `${selectedFile.size} bytes`
+              );
+              setFile(selectedFile);
+            } else {
+              console.log("❌ No se seleccionó archivo");
+              setFile(null);
+            }
+          }}
           className="form-file"
           disabled={operationLoading}
         />
@@ -202,6 +248,7 @@ export default function GalleryManagement() {
           </button>
         </div>
       </form>
+
       {/* Galería */}
       <div className="gallery-grid-admin">
         {images.map((image) => (
@@ -233,6 +280,7 @@ export default function GalleryManagement() {
           </div>
         ))}
       </div>
+
       {images.length === 0 && !operationLoading && (
         <p className="no-results">
           No hay imágenes en {activeTab}. Sube la primera arriba.

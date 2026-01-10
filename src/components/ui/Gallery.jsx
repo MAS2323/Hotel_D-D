@@ -73,7 +73,7 @@ const Gallery = () => {
   const displayedImages = images.slice(0, 6); // Dos filas: 3 por fila en desktop
   const hasMore = images.length > 6;
 
-  const handleViewMore = () => {
+  const handleViewGallery = () => {
     navigate("/full-gallery");
   };
 
@@ -102,11 +102,10 @@ const Gallery = () => {
             </div>
           ))}
         </div>
-        {hasMore && (
-          <button className="gallery-view-more" onClick={handleViewMore}>
-            Ver Más Imágenes
-          </button>
-        )}
+        {/* Botón siempre visible al final del componente */}
+        <button className="gallery-view-more" onClick={handleViewGallery}>
+          Ver Galería Completa
+        </button>
       </div>
     </section>
   );

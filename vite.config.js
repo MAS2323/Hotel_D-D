@@ -8,7 +8,8 @@ export default defineConfig({
   server: {
     proxy: {
       "/api": {
-        target: "http://82.29.174.217",
+        target: "http://localhost:5173/",
+        // target: "https://api.hotelddguineaecuatorial.com/",
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, ""),
       },

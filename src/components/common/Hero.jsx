@@ -97,7 +97,7 @@ const Hero = () => {
         backgroundSize: "cover",
         backgroundPosition: "center",
         backgroundRepeat: "no-repeat",
-        height: "80vh",
+        backgroundAttachment: "fixed", // Mejora la visibilidad en scroll (opcional, remover si causa issues en mobile)
       }}
     >
       <div className="hero-overlay">

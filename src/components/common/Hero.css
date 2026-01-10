@@ -1,13 +1,16 @@
 /* src/components/common/Hero.css */
 .hero {
   position: relative;
-  height: 80vh;
+  min-height: 80vh; /* Cambiado a min-height para flexibilidad en pantallas pequeñas */
+  height: 100vh; /* Full viewport en desktop para mejor cobertura */
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
+  background-attachment: fixed; /* Parallax sutil para desktop; se desactiva en mobile */
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: hidden; /* Evita desbordes en imágenes */
 }
 
 .hero-overlay {
@@ -22,6 +25,7 @@
   align-items: center;
   justify-content: center;
   padding: 20px;
+  min-height: 100%; /* Asegura cobertura completa */
 }
 
 .hero-content {
@@ -30,11 +34,13 @@
   max-width: 800px;
   width: 100%;
   padding: 0 20px;
+  box-sizing: border-box; /* Incluye padding en width */
 }
 
 .hotel-info {
   text-align: center;
   margin-bottom: 20px;
+  width: 100%;
 }
 
 .hero-subtitle-large {
@@ -73,6 +79,7 @@
   font-size: 0.9rem;
   transition: background 0.3s;
   text-shadow: none;
+  white-space: nowrap; /* Evita wrap en mobile */
 }
 
 .gallery-btn:hover {
@@ -82,6 +89,7 @@
 .cta-section {
   text-align: center;
   margin-top: 0;
+  width: 100%;
 }
 
 .cta-text {
@@ -106,6 +114,7 @@
   text-transform: uppercase;
   letter-spacing: 1px;
   box-shadow: 0 4px 15px rgba(112, 23, 5, 0.3);
+  white-space: nowrap; /* Evita wrap en botones */
 }
 
 .cta-button:hover {
@@ -142,10 +151,35 @@
   }
 }
 
-/* Responsive */
+/* Responsive mejorado para todos los tamaños de pantalla */
+/* Tablet y desktop mediano */
+@media (max-width: 1024px) {
+  .hero {
+    height: 90vh;
+    background-attachment: scroll; /* Desactiva fixed en tablets para mejor perf */
+  }
+
+  .hero-subtitle-large {
+    font-size: 2.2rem;
+  }
+
+  .cta-button {
+    padding: 14px 35px;
+    font-size: 1.3rem;
+  }
+}
+
+/* Mobile grande (tablets portrait, phablets) */
 @media (max-width: 768px) {
   .hero {
     height: 70vh;
+    min-height: 60vh; /* Mínimo para pantallas muy cortas */
+    background-attachment: scroll;
+    background-position: center top; /* Prioriza el top en mobile para no cortar caras/objetos clave */
+  }
+
+  .hero-content {
+    padding: 0 15px;
   }
 
   .hero-subtitle-large {
@@ -156,13 +190,104 @@
     font-size: 1.2rem;
   }
 
+  .hotel-location {
+    font-size: 1rem;
+  }
+
+  .cta-text {
+    font-size: 1.1rem;
+  }
+
   .cta-button {
     font-size: 1.2rem;
     padding: 12px 30px;
   }
 
+  .gallery-btn {
+    font-size: 0.85rem;
+    padding: 7px 14px;
+  }
+
   .hotel-info,
   .cta-section {
     text-align: center;
+  }
+
+  /* Stack vertical más apretado en mobile */
+  .hotel-info {
+    margin-bottom: 15px;
+  }
+
+  .cta-section {
+    margin-top: 10px;
+  }
+}
+
+/* Mobile pequeño (smartphones) */
+@media (max-width: 480px) {
+  .hero {
+    height: 60vh;
+    min-height: 50vh;
+    background-size: cover; /* Mantiene cover, pero con position top para visibilidad */
+    background-position: center top;
+  }
+
+  .hero-overlay {
+    padding: 15px;
+  }
+
+  .hero-content {
+    max-width: 100%;
+    padding: 0 10px;
+  }
+
+  .hero-subtitle-large {
+    font-size: 1.8rem;
+    line-height: 1.1;
+  }
+
+  .hero-subtitle {
+    font-size: 1.1rem;
+  }
+
+  .hotel-location {
+    font-size: 0.95rem;
+    margin-bottom: 10px;
+  }
+
+  .cta-text {
+    font-size: 1rem;
+    margin-bottom: 10px;
+  }
+
+  .cta-button {
+    font-size: 1.1rem;
+    padding: 10px 25px;
+  }
+
+  .gallery-btn {
+    font-size: 0.8rem;
+    padding: 6px 12px;
+  }
+}
+
+/* Orientación landscape en mobile */
+@media (max-height: 500px) and (orientation: landscape) {
+  .hero {
+    height: 100vh;
+    min-height: auto;
+  }
+
+  .hero-content {
+    padding: 10px;
+  }
+
+  .hero-subtitle-large {
+    font-size: 1.6rem;
+  }
+
+  .cta-button {
+    padding: 8px 20px;
+    font-size: 1rem;
   }
 }
