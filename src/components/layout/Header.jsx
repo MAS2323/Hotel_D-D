@@ -44,69 +44,95 @@ const Header = () => {
             <span></span>
           </button>
           <ul className={`header-menu ${isMenuOpen ? "header-menu-open" : ""}`}>
-            <li>
-              <Link
-                to="/rooms"
-                className={`header-link ${isActive("/rooms")}`}
-                onClick={closeMenu}
+            <div className="header-menu-items">
+              <li>
+                <Link
+                  to="/rooms"
+                  className={`header-link ${isActive("/rooms")}`}
+                  onClick={closeMenu}
+                >
+                  Habitaciones
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/about"
+                  className={`header-link ${isActive("/about")}`}
+                  onClick={closeMenu}
+                >
+                  Sobre Nosotros
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/booking"
+                  className={`header-link ${isActive("/booking")}`}
+                  onClick={closeMenu}
+                >
+                  Reservar
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/contact"
+                  className={`header-link ${isActive("/contact")}`}
+                  onClick={closeMenu}
+                >
+                  Contacto
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/services"
+                  className={`header-link ${isActive("/services")}`}
+                  onClick={closeMenu}
+                >
+                  Servicios
+                </Link>
+              </li>
+              {isAdmin ? (
+                <>
+                  <li>
+                    <Link
+                      to="/admin"
+                      className="header-link header-link-active"
+                      onClick={closeMenu}
+                    >
+                      Admin
+                    </Link>
+                  </li>
+                  <li>
+                    <button
+                      onClick={handleLogout}
+                      className="header-logout-btn"
+                    >
+                      Salir
+                    </button>
+                  </li>
+                </>
+              ) : null}
+            </div>
+            {isMenuOpen && (
+              <li
+                className="header-powered-by"
+                style={{
+                  marginTop: "auto",
+                  textAlign: "center",
+                  paddingTop: "20px",
+                }}
               >
-                Habitaciones
-              </Link>
-            </li>
-            <li>
-              <Link
-                to="/about"
-                className={`header-link ${isActive("/about")}`}
-                onClick={closeMenu}
-              >
-                Sobre Nosotros
-              </Link>
-            </li>
-            <li>
-              <Link
-                to="/booking"
-                className={`header-link ${isActive("/booking")}`}
-                onClick={closeMenu}
-              >
-                Reservar
-              </Link>
-            </li>
-            <li>
-              <Link
-                to="/contact"
-                className={`header-link ${isActive("/contact")}`}
-                onClick={closeMenu}
-              >
-                Contacto
-              </Link>
-            </li>
-            <li>
-              <Link
-                to="/services"
-                className={`header-link ${isActive("/services")}`}
-                onClick={closeMenu}
-              >
-                Servicios
-              </Link>
-            </li>
-            {isAdmin ? (
-              <>
-                <li>
-                  <Link
-                    to="/admin"
-                    className="header-link header-link-active"
-                    onClick={closeMenu}
+                <p className="footer-powered-by">
+                  Powered by{" "}
+                  <a
+                    href="https://www.instagram.com/tecnologias_mas?igsh=MWh2c3h2ZTZsN2s5cg%3D%3D&utm_source=qr"
+                    target="_blank"
+                    rel="noopener noreferrer"
                   >
-                    Admin
-                  </Link>
-                </li>
-                <li>
-                  <button onClick={handleLogout} className="header-logout-btn">
-                    Salir
-                  </button>
-                </li>
-              </>
-            ) : null}
+                    Tecnologías Más
+                  </a>
+                </p>
+              </li>
+            )}
           </ul>
         </div>
       </nav>
