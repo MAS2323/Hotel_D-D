@@ -1,6 +1,12 @@
 // src/App.js
 import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
+import { useAuth } from "./hooks/useAuth"; // Ajusta la ruta si es necesario
 import Layout from "./components/layout/Layout";
 import Home from "./pages/public/Home";
 import About from "./pages/public/About";
@@ -23,6 +29,11 @@ import PropertyDetails from "./components/ui/PropertyDetails";
 import UserLogin from "./pages/public/UserLogin";
 import Terms from "./pages/public/Terms";
 import Privacy from "./pages/public/Privacy";
+
+const ProtectedAdminRoute = ({ children }) => {
+  const { isAdmin } = useAuth();
+  return isAdmin ? children : <Navigate to="/admin/login-dd-hotel" replace />;
+};
 
 function App() {
   return (
@@ -47,7 +58,14 @@ function App() {
           <Route path="/submit-testimonial" element={<SubmitTestimonial />} />
           <Route path="/login" element={<UserLogin />} />
           <Route path="/admin/login-dd-hotel" element={<Login />} />
-          <Route path="/admin/*" element={<AdminDashboard />} />
+          <Route
+            path="/admin/*"
+            element={
+              <ProtectedAdminRoute>
+                <AdminDashboard />
+              </ProtectedAdminRoute>
+            }
+          />
           <Route path="/menu" element={<MenuView />} />
           <Route path="/full-gallery/" element={<FullGallery />} />
           <Route path="/apartments/:id" element={<PropertyDetails />} />
