@@ -106,17 +106,7 @@ const Header = () => {
                   </button>
                 </li>
               </>
-            ) : (
-              <li>
-                <Link
-                  to="/admin/login-dd-hotel"
-                  className="header-admin-btn"
-                  onClick={closeMenu}
-                >
-                  Admin Login
-                </Link>
-              </li>
-            )}
+            ) : null}
           </ul>
         </div>
       </nav>
