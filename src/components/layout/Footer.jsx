@@ -1,5 +1,6 @@
 // src/components/layout/Footer.js
 import logo from "../../assets/img/d&d_logo.png"; // Ajusta la ruta si es necesario
+import { Link } from "react-router-dom"; // Importar Link de React Router
 import "./Footer.css";
 
 const Footer = () => {
@@ -86,22 +87,22 @@ const Footer = () => {
             <h3 className="footer-column-title">Enlaces Rápidos</h3>
             <ul className="footer-links">
               <li>
-                <a href="/">Inicio</a>
+                <Link to="/">Inicio</Link>
               </li>
               <li>
-                <a href="/rooms">Habitaciones</a>
+                <Link to="/rooms">Habitaciones</Link>
               </li>
               <li>
-                <a href="/about">Sobre Nosotros</a>
+                <Link to="/about">Sobre Nosotros</Link>
               </li>
               <li>
-                <a href="/restaurant">Restaurante</a>
+                <Link to="/restaurant">Restaurante</Link>
               </li>
               <li>
-                <a href="/services">Servicios</a>
+                <Link to="/services">Servicios</Link>
               </li>
               <li>
-                <a href="/booking">Reservar</a>
+                <Link to="/booking">Reservar</Link>
               </li>
             </ul>
           </div>
@@ -134,10 +135,10 @@ const Footer = () => {
           </p>
           <ul className="footer-legal-links">
             <li>
-              <a href="/terms">Términos y Condiciones</a>
+              <Link to="/terms">Términos y Condiciones</Link>
             </li>
             <li>
-              <a href="/privacy">Política de Privacidad</a>
+              <Link to="/privacy">Política de Privacidad</Link>
             </li>
           </ul>
           {/* Nueva línea: Powered by */}
